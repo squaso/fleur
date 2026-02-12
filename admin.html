@@ -116,6 +116,12 @@ body { min-height: 100dvh; background-color: #FFF8F7; } /* bg-m3-surface */
         <button onclick="switchTab('products')" id="tab-products" class="admin-tab w-full flex items-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-colors">
           <span class="material-icons-round text-[20px]">inventory_2</span> Productos
         </button>
+        <button onclick="switchTab('orders')" id="tab-orders" class="admin-tab w-full flex items-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-colors">
+          <span class="material-icons-round text-[20px]">receipt_long</span> Pedidos
+        </button>
+        <button onclick="switchTab('history')" id="tab-history" class="admin-tab w-full flex items-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-colors">
+          <span class="material-icons-round text-[20px]">history</span> Historial
+        </button>
       </nav>
     </aside>
 
@@ -132,6 +138,18 @@ body { min-height: 100dvh; background-color: #FFF8F7; } /* bg-m3-surface */
           <span class="material-icons-round text-xl">inventory_2</span>
         </div>
         <span class="text-[11px] font-medium">Productos</span>
+      </button>
+      <button onclick="switchTab('orders')" id="mtab-orders" class="flex-1 flex flex-col items-center py-2 relative group">
+        <div id="mtab-orders-pill" class="w-16 h-8 rounded-full flex items-center justify-center transition-colors mb-1">
+          <span class="material-icons-round text-xl">receipt_long</span>
+        </div>
+        <span class="text-[11px] font-medium">Pedidos</span>
+      </button>
+      <button onclick="switchTab('history')" id="mtab-history" class="flex-1 flex flex-col items-center py-2 relative group">
+        <div id="mtab-history-pill" class="w-16 h-8 rounded-full flex items-center justify-center transition-colors mb-1">
+          <span class="material-icons-round text-xl">history</span>
+        </div>
+        <span class="text-[11px] font-medium">Historial</span>
       </button>
     </div>
 
@@ -193,6 +211,60 @@ body { min-height: 100dvh; background-color: #FFF8F7; } /* bg-m3-surface */
           <p class="text-sm">Agrega tu primer arreglo floral</p>
         </div>
       </div>
+
+      <!-- ═══ ORDERS TAB (Activos) ═══ -->
+      <div id="panel-orders" class="hidden fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight">Pedidos Activos</h2>
+            <p class="text-sm text-m3-on-surface-variant mt-1">Órdenes pendientes y en proceso</p>
+          </div>
+          <button onclick="fetchOrders()" class="bg-m3-surface-container-high hover:bg-m3-surface-variant text-m3-on-surface-variant font-semibold px-4 py-2.5 rounded-[12px] flex items-center gap-2 transition-all shadow-sm text-sm w-max">
+            <span class="material-icons-round text-[18px]">refresh</span> Actualizar
+          </button>
+        </div>
+
+        <div id="orders-list" class="space-y-4">
+          <!-- Populated by JS -->
+        </div>
+        
+        <div id="orders-empty" class="hidden text-center py-20 text-m3-outline">
+          <div class="w-24 h-24 bg-m3-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons-round text-5xl text-m3-outline-variant">receipt_long</span>
+          </div>
+          <p class="font-bold text-lg text-m3-on-surface-variant">Sin pedidos activos</p>
+          <p class="text-sm">¡Buen trabajo! No hay órdenes pendientes.</p>
+        </div>
+      </div>
+
+      <!-- ═══ HISTORY TAB (Finalizados) ═══ -->
+      <div id="panel-history" class="hidden fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight">Historial</h2>
+            <p class="text-sm text-m3-on-surface-variant mt-1">Pedidos entregados y cancelados</p>
+          </div>
+          <div class="relative w-full sm:w-72">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span class="material-icons-round text-m3-outline text-[20px]">search</span>
+            </div>
+            <input id="history-search" oninput="renderHistoryOrders()" type="text" class="w-full bg-m3-surface-container border-none rounded-full pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-m3-primary placeholder-m3-outline focus:outline-none transition-shadow" placeholder="Buscar por nombre, ID..."/>
+          </div>
+        </div>
+
+        <div id="history-list" class="space-y-4">
+          <!-- Populated by JS -->
+        </div>
+        
+        <div id="history-empty" class="hidden text-center py-20 text-m3-outline">
+          <div class="w-24 h-24 bg-m3-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons-round text-5xl text-m3-outline-variant">history_toggle_off</span>
+          </div>
+          <p class="font-bold text-lg text-m3-on-surface-variant">Sin historial</p>
+          <p class="text-sm">No hay pedidos completados recientemente.</p>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -371,13 +443,15 @@ body { min-height: 100dvh; background-color: #FFF8F7; } /* bg-m3-surface */
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-const SUPABASE_URL = "https://tonzgawcuhrxetbfvust.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_s37mYvHnnE9ppfg857BsVg_Yx7-BkMm";
+// CREDENCIALES ACTUALIZADAS
+const SUPABASE_URL = "https://kihsjtpzevgtqpckgeux.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpaHNqdHB6ZXZndHFwY2tnZXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MjEwMDksImV4cCI6MjA4NjQ5NzAwOX0.63iuNCkhfazNnjW_xWHQG_70YBsiewytcL0dzBvUFDc";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let allSections = [];
 let allProducts = [];
+let allOrders = []; // New global state for orders
 let deleteCallback = null;
 let currentTab = 'sections';
 let alertTimeout;
@@ -404,6 +478,11 @@ window.removeOptionRow = removeOptionRow;
 
 window.closeDeleteModal = closeDeleteModal;
 window.confirmDelete = confirmDelete;
+
+// New Logic for Orders
+window.fetchOrders = fetchOrders;
+window.updateOrderStatus = updateOrderStatus;
+window.renderHistoryOrders = renderHistoryOrders; // Expose for search
 
 // ── Custom Alert (M3 Snackbar style) ──
 window.showAlert = function(msg, isError = true) {
@@ -482,6 +561,7 @@ async function loadAllData() {
     renderSectionsList();
     renderProductsList();
     populateSectionDropdowns();
+    fetchOrders(); // Load orders as well
   } catch (e) {
     console.error('Error loading data:', e);
     showAlert('Error al cargar datos: ' + e.message);
@@ -491,7 +571,7 @@ async function loadAllData() {
 // ── Tabs (M3 Navigation) ──
 function switchTab(tab) {
   currentTab = tab;
-  ['sections', 'products'].forEach(t => {
+  ['sections', 'products', 'orders', 'history'].forEach(t => {
     // Desktop Nav Rail/Drawer
     const deskTab = document.getElementById(`tab-${t}`);
     if (deskTab) {
@@ -519,7 +599,8 @@ function switchTab(tab) {
       }
     }
 
-    document.getElementById(`panel-${t}`).classList.toggle('hidden', t !== tab);
+    const panel = document.getElementById(`panel-${t}`);
+    if(panel) panel.classList.toggle('hidden', t !== tab);
   });
 }
 switchTab('sections');
@@ -621,14 +702,14 @@ async function saveSection() {
       subtitle: document.getElementById('section-subtitle').value.trim(),
       badge: document.getElementById('section-badge').value.trim(),
       featured: document.getElementById('section-featured').checked,
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
     if (id) {
       const { error } = await supabase.from('sections').update(data).eq('id', id);
       if (error) throw error;
     } else {
-      data.createdAt = new Date().toISOString();
+      data.created_at = new Date().toISOString();
       const { error } = await supabase.from('sections').insert([data]);
       if (error) throw error;
     }
@@ -808,14 +889,14 @@ async function saveProduct() {
       order: parseInt(document.getElementById('product-order').value) || 1,
       featured: document.getElementById('product-featured').checked,
       options: options,
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
     if (id) {
       const { error } = await supabase.from('products').update(data).eq('id', id);
       if (error) throw error;
     } else {
-      data.createdAt = new Date().toISOString();
+      data.created_at = new Date().toISOString();
       const { error } = await supabase.from('products').insert([data]);
       if (error) throw error;
     }
@@ -856,6 +937,146 @@ async function confirmDelete() {
     }
   }
   closeDeleteModal();
+}
+
+// ═══════════════════════════════
+// ORDERS LOGIC
+// ═══════════════════════════════
+
+async function updateOrderStatus(id, newStatus) {
+  try {
+    const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', id);
+    if (error) throw error;
+    showAlert(`Pedido #${id} actualizado a: ${newStatus}`, false);
+    fetchOrders(); // Reload orders to update UI (move to history if needed)
+  } catch (e) {
+    console.error(e);
+    showAlert('Error al actualizar estado: ' + e.message);
+  }
+}
+
+async function fetchOrders() {
+  const listActive = document.getElementById('orders-list');
+  const emptyActive = document.getElementById('orders-empty');
+  listActive.innerHTML = '<div class="text-center py-4"><span class="material-icons-round animate-spin text-m3-primary">refresh</span></div>';
+
+  try {
+    const { data: orders, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    allOrders = orders || []; // Store globally for search filtering
+
+    renderActiveOrders();
+    renderHistoryOrders();
+
+  } catch (e) {
+    console.error(e);
+    showAlert('Error al cargar pedidos: ' + e.message);
+  }
+}
+
+function renderActiveOrders() {
+  const list = document.getElementById('orders-list');
+  const empty = document.getElementById('orders-empty');
+  
+  // Filter only Active Orders
+  const activeOrders = allOrders.filter(o => !['entregado', 'cancelado'].includes(o.status));
+
+  if (activeOrders.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  list.innerHTML = activeOrders.map(o => createOrderCard(o)).join('');
+}
+
+function renderHistoryOrders() {
+  const list = document.getElementById('history-list');
+  const empty = document.getElementById('history-empty');
+  const searchTerm = document.getElementById('history-search').value.toLowerCase().trim();
+
+  // Filter History Orders + Search
+  let historyOrders = allOrders.filter(o => ['entregado', 'cancelado'].includes(o.status));
+
+  if (searchTerm) {
+    historyOrders = historyOrders.filter(o => 
+      o.customer_name.toLowerCase().includes(searchTerm) ||
+      o.id.toString().includes(searchTerm) ||
+      o.customer_address.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  if (historyOrders.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  list.innerHTML = historyOrders.map(o => createOrderCard(o)).join('');
+}
+
+function createOrderCard(o) {
+  const date = new Date(o.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
+  
+  let statusColorClass = 'bg-[#E0E0E0] text-[#424242]';
+  if (o.status === 'pendiente') statusColorClass = 'bg-[#FFDAD6] text-[#410002]';
+  else if (o.status === 'en camino') statusColorClass = 'bg-[#FFD8E4] text-[#31111D]';
+  else if (o.status === 'entregado') statusColorClass = 'bg-[#E8F5E9] text-[#052E16]';
+  else if (o.status === 'cancelado') statusColorClass = 'bg-[#F2F2F2] text-[#5e5e5e]';
+
+  // Parse Items
+  let itemsHtml = '';
+  if (Array.isArray(o.items)) {
+    itemsHtml = o.items.map(i => `
+      <div class="text-xs text-m3-on-surface-variant flex justify-between">
+        <span>${i.quantity}x ${i.product_name} ${i.option_name ? `(${i.option_name})` : ''}</span>
+        <span>$${i.total_price.toFixed(2)}</span>
+      </div>
+    `).join('');
+  }
+
+  return `
+  <div class="bg-m3-surface-container rounded-[24px] p-5 hover:bg-m3-surface-container-high transition-colors fade-in">
+    <div class="flex justify-between items-start mb-3">
+      <div>
+        <h3 class="font-bold text-[1.1rem] text-m3-on-surface">Pedido #${o.id}</h3>
+        <p class="text-xs text-m3-on-surface-variant">${date}</p>
+      </div>
+      
+      <div class="relative">
+        <select onchange="updateOrderStatus(${o.id}, this.value)" class="appearance-none pl-3 pr-8 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-transparent border-0 ring-1 ring-inset focus:ring-2 focus:ring-inset cursor-pointer ${statusColorClass}" style="box-shadow: none;">
+          <option value="pendiente" ${o.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+          <option value="en camino" ${o.status === 'en camino' ? 'selected' : ''}>En camino</option>
+          <option value="entregado" ${o.status === 'entregado' ? 'selected' : ''}>Entregado</option>
+          <option value="cancelado" ${o.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+           <span class="material-icons-round text-[14px]">expand_more</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mb-3 p-3 bg-m3-surface-container-low rounded-[16px] space-y-1">
+      <p class="text-sm font-semibold text-m3-on-surface">${o.customer_name}</p>
+      <p class="text-xs text-m3-on-surface-variant flex items-start gap-1"><span class="material-icons-round text-[14px]">place</span> ${o.customer_address}</p>
+      ${o.customer_message ? `<p class="text-xs text-m3-on-surface-variant italic mt-1">"${o.customer_message}"</p>` : ''}
+    </div>
+
+    <div class="space-y-1 mb-3 border-t border-m3-outline-variant/20 pt-2">
+      ${itemsHtml}
+    </div>
+    
+    <div class="flex justify-between items-center border-t border-m3-outline-variant/50 pt-3">
+      <span class="text-sm font-medium text-m3-on-surface-variant">Total</span>
+      <span class="text-xl font-extrabold text-m3-primary">$${o.total_amount.toFixed(2)}</span>
+    </div>
+  </div>`;
 }
 </script>
 </body>
