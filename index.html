@@ -600,7 +600,8 @@ async function processOrder() {
       };
     });
 
-    const totalAmount = subtotal + 15;
+    const shipping = 15;
+    const totalAmount = subtotal + shipping;
 
     // Payload para Supabase
     const orderPayload = {
@@ -609,6 +610,7 @@ async function processOrder() {
       customer_message: message,
       items: itemsData,
       total_amount: totalAmount,
+      shipping_cost: shipping,
       status: 'pendiente'
     };
 
