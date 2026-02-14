@@ -70,40 +70,107 @@ body { min-height: 100dvh; background-color: #FFF8F7; -webkit-tap-highlight-colo
         <div class="w-10 h-full flex items-center justify-center shrink-0">
           <span class="material-icons-round text-m3-on-surface-variant">search</span>
         </div>
-        <input id="search-input" oninput="filterProducts()" class="flex-1 bg-transparent border-none h-full text-[15px] text-m3-on-surface placeholder-m3-on-surface-variant font-medium focus:ring-0 px-0" placeholder="Buscar rosas, regalos..." type="text"/>
+        <input id="search-input" oninput="filterProducts()" onfocus="navigateTo('browse')" class="flex-1 bg-transparent border-none h-full text-[15px] text-m3-on-surface placeholder-m3-on-surface-variant font-medium focus:ring-0 px-0" placeholder="Buscar rosas, regalos..." type="text"/>
       </div>
     </div>
   </header>
 
   <!-- MAIN CONTENT -->
   <main class="max-w-lg mx-auto w-full px-4 pt-4 pb-32">
-    <section id="categories-section" class="mb-8">
-      <div id="categories-bar" class="flex space-x-2 overflow-x-auto hide-scrollbar pb-1"></div>
-    </section>
+    
+    <!-- HOME & BROWSE VIEW -->
+    <div id="home-view">
+      <section id="categories-section" class="mb-8">
+        <div id="categories-bar" class="flex space-x-2 overflow-x-auto hide-scrollbar pb-1"></div>
+      </section>
 
-    <section id="banner-section" class="mb-8">
-      <div id="banner-container"></div>
-    </section>
+      <section id="banner-section" class="mb-8">
+        <div id="banner-container"></div>
+      </section>
 
-    <section>
-      <div class="flex justify-between items-end mb-5 px-1">
-        <h2 id="section-title" class="text-2xl font-bold tracking-tight text-m3-on-surface">Para ti</h2>
-      </div>
-      
-      <div id="products-grid" class="grid grid-cols-2 gap-3 sm:gap-4"></div>
-      
-      <div id="no-products" class="hidden text-center py-20 text-m3-outline">
-        <div class="w-20 h-20 bg-m3-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
-          <span class="material-icons-round text-4xl text-m3-outline-variant">search_off</span>
+      <section>
+        <div class="flex justify-between items-end mb-5 px-1">
+          <h2 id="section-title" class="text-2xl font-bold tracking-tight text-m3-on-surface">Para ti</h2>
         </div>
-        <p class="font-bold text-lg text-m3-on-surface-variant">Sin resultados</p>
-      </div>
+        
+        <div id="products-grid" class="grid grid-cols-2 gap-3 sm:gap-4"></div>
+        
+        <div id="no-products" class="hidden text-center py-20 text-m3-outline">
+          <div class="w-20 h-20 bg-m3-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons-round text-4xl text-m3-outline-variant">search_off</span>
+          </div>
+          <p class="font-bold text-lg text-m3-on-surface-variant">Sin resultados</p>
+        </div>
+        
+        <div id="loading-skeleton" class="grid grid-cols-2 gap-4">
+          <div class="bg-m3-surface-container rounded-[24px] overflow-hidden animate-pulse"><div class="aspect-[4/5] bg-m3-surface-variant"></div><div class="p-4"><div class="h-4 bg-m3-surface-variant rounded-full w-3/4 mb-3"></div><div class="h-5 bg-m3-surface-variant rounded-full w-1/2"></div></div></div>
+          <div class="bg-m3-surface-container rounded-[24px] overflow-hidden animate-pulse"><div class="aspect-[4/5] bg-m3-surface-variant"></div><div class="p-4"><div class="h-4 bg-m3-surface-variant rounded-full w-3/4 mb-3"></div><div class="h-5 bg-m3-surface-variant rounded-full w-1/2"></div></div></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PROFILE VIEW -->
+    <div id="profile-view" class="hidden fade-in">
       
-      <div id="loading-skeleton" class="grid grid-cols-2 gap-4">
-        <div class="bg-m3-surface-container rounded-[24px] overflow-hidden animate-pulse"><div class="aspect-[4/5] bg-m3-surface-variant"></div><div class="p-4"><div class="h-4 bg-m3-surface-variant rounded-full w-3/4 mb-3"></div><div class="h-5 bg-m3-surface-variant rounded-full w-1/2"></div></div></div>
-        <div class="bg-m3-surface-container rounded-[24px] overflow-hidden animate-pulse"><div class="aspect-[4/5] bg-m3-surface-variant"></div><div class="p-4"><div class="h-4 bg-m3-surface-variant rounded-full w-3/4 mb-3"></div><div class="h-5 bg-m3-surface-variant rounded-full w-1/2"></div></div></div>
+      <!-- Unauthenticated: Login/Register -->
+      <div id="auth-container" class="max-w-sm mx-auto pt-4">
+        <div class="text-center mb-8">
+          <div class="w-20 h-20 bg-m3-primary-container text-m3-on-primary-container rounded-full flex items-center justify-center mx-auto mb-4 transform -rotate-6">
+            <span class="material-icons-round text-4xl">local_florist</span>
+          </div>
+          <h2 class="text-2xl font-bold text-m3-on-surface">Bienvenido</h2>
+          <p class="text-m3-on-surface-variant text-sm mt-1">Inicia sesión para ver tus pedidos</p>
+        </div>
+
+        <div class="bg-m3-surface-container-low rounded-[28px] p-6 shadow-sm border border-m3-surface-container-high">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Email</label>
+              <input id="auth-email" type="email" class="w-full bg-m3-surface-container-lowest border-2 border-m3-surface-container-highest focus:border-m3-primary rounded-[16px] px-4 py-3.5 text-sm focus:ring-0 transition-colors" placeholder="tu@email.com"/>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Contraseña</label>
+              <input id="auth-password" type="password" class="w-full bg-m3-surface-container-lowest border-2 border-m3-surface-container-highest focus:border-m3-primary rounded-[16px] px-4 py-3.5 text-sm focus:ring-0 transition-colors" placeholder="••••••••"/>
+            </div>
+            
+            <button onclick="handleAuth()" id="btn-auth" class="w-full bg-m3-primary text-m3-on-primary font-bold py-4 rounded-full shadow-m3-elevation-1 active:scale-[0.98] transition-all mt-2">
+              Iniciar Sesión
+            </button>
+          </div>
+
+          <div class="mt-6 text-center">
+            <button onclick="toggleAuthMode()" id="btn-auth-toggle" class="text-sm font-semibold text-m3-primary hover:underline">
+              ¿No tienes cuenta? Regístrate
+            </button>
+          </div>
+        </div>
       </div>
-    </section>
+
+      <!-- Authenticated: User Profile -->
+      <div id="user-profile" class="hidden">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight text-m3-on-surface">Mi Perfil</h2>
+            <p id="user-email-display" class="text-sm text-m3-on-surface-variant font-medium mt-1">cargando...</p>
+          </div>
+          <button onclick="handleLogout()" class="w-10 h-10 rounded-full bg-m3-surface-container-high text-m3-on-surface-variant hover:bg-[#FFDAD6] hover:text-[#410002] flex items-center justify-center transition-colors">
+            <span class="material-icons-round text-xl">logout</span>
+          </button>
+        </div>
+
+        <div class="mb-6">
+          <h3 class="text-lg font-bold text-m3-on-surface mb-4 px-1">Mis Pedidos Recientes</h3>
+          <div id="orders-list" class="space-y-4">
+            <!-- Orders injected here -->
+          </div>
+          <div id="no-orders" class="hidden text-center py-10 bg-m3-surface-container-low rounded-[24px] border border-dashed border-m3-outline-variant">
+            <p class="text-m3-on-surface-variant font-medium">Aún no tienes pedidos</p>
+            <button onclick="navigateTo('home')" class="mt-2 text-sm font-bold text-m3-primary">Explorar tienda</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <!-- Navigation -->
@@ -125,7 +192,7 @@ body { min-height: 100dvh; background-color: #FFF8F7; -webkit-tap-highlight-colo
           <span id="cart-badge-nav" class="hidden absolute top-0 right-0 h-4 w-4 bg-m3-primary text-m3-on-primary text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-m3-surface-container transform translate-x-1/4 -translate-y-1/4">0</span>
         </div>
       </button>
-      <button onclick="showToast('Perfil próximamente')" class="nav-btn group relative flex items-center justify-center" data-target="profile">
+      <button onclick="navigateTo('profile')" class="nav-btn group relative flex items-center justify-center" data-target="profile">
         <div class="w-11 h-11 rounded-full flex items-center justify-center transition-colors text-m3-on-surface-variant nav-pill">
           <span class="material-icons-round text-[24px]">person</span>
         </div>
@@ -158,7 +225,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const SUPABASE_URL = "https://kihsjtpzevgtqpckgeux.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpaHNqdHB6ZXZndHFwY2tnZXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MjEwMDksImV4cCI6MjA4NjQ5NzAwOX0.63iuNCkhfazNnjW_xWHQG_70YBsiewytcL0dzBvUFDc";
-const PHONE_NUMBER = "17049079361"; // Tu número de WhatsApp
+const PHONE_NUMBER = "17049079361"; 
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -166,6 +233,8 @@ let allProducts = [];
 let allSections = [];
 let cart = JSON.parse(localStorage.getItem('fleur-cart') || '[]');
 let activeCategory = 'all';
+let currentUser = null;
+let isLoginMode = true;
 
 // Expose to global
 window.addToCart = addToCart;
@@ -181,7 +250,123 @@ window.filterProducts = filterProducts;
 window.navigateTo = navigateTo;
 window.processOrder = processOrder;
 window.showToast = showToast;
+window.handleAuth = handleAuth;
+window.toggleAuthMode = toggleAuthMode;
+window.handleLogout = handleLogout;
 
+// ── Auth Logic ──
+async function initAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  updateAuthUI(session);
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    updateAuthUI(session);
+  });
+}
+
+function updateAuthUI(session) {
+  currentUser = session?.user || null;
+  const authContainer = document.getElementById('auth-container');
+  const userProfile = document.getElementById('user-profile');
+  
+  if (currentUser) {
+    authContainer.classList.add('hidden');
+    userProfile.classList.remove('hidden');
+    document.getElementById('user-email-display').textContent = currentUser.email;
+    loadUserOrders();
+  } else {
+    authContainer.classList.remove('hidden');
+    userProfile.classList.add('hidden');
+  }
+}
+
+async function handleAuth() {
+  const email = document.getElementById('auth-email').value;
+  const password = document.getElementById('auth-password').value;
+  const btn = document.getElementById('btn-auth');
+  
+  if (!email || !password) { showToast('Rellena todos los campos'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Procesando...';
+
+  try {
+    if (isLoginMode) {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+    } else {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) throw error;
+      showToast('¡Registro exitoso! Iniciando sesión...');
+    }
+  } catch (e) {
+    showToast(e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = isLoginMode ? 'Iniciar Sesión' : 'Registrarse';
+  }
+}
+
+function toggleAuthMode() {
+  isLoginMode = !isLoginMode;
+  document.getElementById('btn-auth').textContent = isLoginMode ? 'Iniciar Sesión' : 'Registrarse';
+  document.getElementById('btn-auth-toggle').textContent = isLoginMode ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia Sesión';
+}
+
+async function handleLogout() {
+  await supabase.auth.signOut();
+  showToast('Sesión cerrada');
+}
+
+async function loadUserOrders() {
+  if (!currentUser) return;
+  const list = document.getElementById('orders-list');
+  const empty = document.getElementById('no-orders');
+  
+  list.innerHTML = '<div class="text-center py-4 text-sm text-m3-outline">Cargando pedidos...</div>';
+
+  const { data: orders, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  if (error || !orders || orders.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+
+  empty.classList.add('hidden');
+  list.innerHTML = orders.map(o => {
+    const date = new Date(o.created_at).toLocaleDateString();
+    let statusColor = 'bg-gray-100 text-gray-600';
+    if(o.status === 'pendiente') statusColor = 'bg-yellow-100 text-yellow-800';
+    if(o.status === 'en camino') statusColor = 'bg-blue-100 text-blue-800';
+    if(o.status === 'entregado') statusColor = 'bg-green-100 text-green-800';
+
+    return `
+      <div class="bg-m3-surface-container rounded-[20px] p-4 border border-m3-surface-container-high">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <span class="text-xs font-bold text-m3-outline uppercase tracking-wider">Pedido #${o.id}</span>
+            <p class="text-xs text-m3-on-surface-variant">${date}</p>
+          </div>
+          <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${statusColor}">${o.status}</span>
+        </div>
+        <div class="text-sm font-medium text-m3-on-surface mb-2">
+          ${o.items.length} artículo(s) • ${o.customer_address}
+        </div>
+        <div class="flex justify-between items-end border-t border-m3-outline/10 pt-2">
+          <span class="text-xs text-m3-on-surface-variant">Total</span>
+          <span class="text-lg font-bold text-m3-primary">$${o.total_amount.toFixed(2)}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── App Logic ──
 async function loadData() {
   try {
     const { data: sectionsData } = await supabase.from('sections').select('*').order('order', { ascending: true });
@@ -194,6 +379,7 @@ async function loadData() {
     renderBanner();
     renderProducts();
     updateCartUI();
+    initAuth(); // Inicializar Auth
   } catch (e) {
     console.error('Error loading data:', e);
   }
@@ -386,7 +572,6 @@ function renderCartContent() {
     </div>`;
 }
 
-// ── processOrder Implementada Correctamente ──
 async function processOrder() {
   const recipient = document.getElementById('cart-recipient').value.trim();
   const address = document.getElementById('cart-address').value.trim();
@@ -417,20 +602,26 @@ async function processOrder() {
 
     const totalAmount = subtotal + 15;
 
-    // 1. Guardar en Supabase (para que aparezca en el admin)
-    const { data, error } = await supabase.from('orders').insert([{
+    // Payload para Supabase
+    const orderPayload = {
       customer_name: recipient,
       customer_address: address,
       customer_message: message,
       items: itemsData,
       total_amount: totalAmount,
       status: 'pendiente'
-    }]).select();
+    };
+
+    // Si el usuario está logueado, añadimos su ID al pedido
+    if (currentUser) {
+      orderPayload.user_id = currentUser.id;
+    }
+
+    const { error } = await supabase.from('orders').insert([orderPayload]);
 
     if (error) throw error;
 
-    // 2. Preparar mensaje de WhatsApp
-    let waText = `¡Hola Fleur d'Amour! 🌸\n\nHe realizado un nuevo pedido:\n`;
+    let waText = `¡Hola Fleur d'Amour! 🌸\n\nHe realizado un nuevo pedido${currentUser ? ' (Soy cliente registrado)' : ''}:\n`;
     itemsData.forEach(i => {
       waText += `- ${i.quantity}x ${i.product_name} ${i.option_name ? `(${i.option_name})` : ''}: $${i.total_price.toFixed(2)}\n`;
     });
@@ -439,7 +630,6 @@ async function processOrder() {
     waText += `*Dirección:* ${address}\n`;
     if (message) waText += `*Nota:* ${message}`;
 
-    // 3. Limpiar carrito y redirigir
     localStorage.removeItem('fleur-cart');
     cart = [];
     updateCartUI();
@@ -447,15 +637,53 @@ async function processOrder() {
 
   } catch (e) {
     console.error(e);
-    showToast('Error al procesar pedido');
+    showToast('Error al procesar pedido: ' + e.message);
     checkoutBtn.disabled = false;
     checkoutBtn.textContent = "Confirmar WhatsApp";
   }
 }
 
 function navigateTo(page) {
-  if (page === 'home') { activeCategory = 'all'; renderProducts(); }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Update UI Pills
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    const pill = btn.querySelector('.nav-pill');
+    if (btn.dataset.target === page) {
+      pill.classList.add('bg-m3-primary-container', 'text-m3-on-primary-container');
+      pill.classList.remove('text-m3-on-surface-variant');
+    } else if (btn.dataset.target !== 'cart') { 
+      pill.classList.remove('bg-m3-primary-container', 'text-m3-on-primary-container');
+      pill.classList.add('text-m3-on-surface-variant');
+    }
+  });
+
+  // View Logic
+  const homeView = document.getElementById('home-view');
+  const profileView = document.getElementById('profile-view');
+
+  if (page === 'home') {
+    activeCategory = 'all';
+    document.getElementById('search-input').value = '';
+    document.getElementById('section-title').textContent = 'Para ti';
+    renderCategories();
+    renderProducts();
+    
+    homeView.classList.remove('hidden');
+    profileView.classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+  } else if (page === 'browse') {
+    // Force switch to home view first if on profile
+    homeView.classList.remove('hidden');
+    profileView.classList.add('hidden');
+    
+    document.getElementById('search-input').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } else if (page === 'profile') {
+    homeView.classList.add('hidden');
+    profileView.classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 
 function filterByCategory(id) { activeCategory = id; renderCategories(); renderProducts(); }
