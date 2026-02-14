@@ -55,17 +55,12 @@ body { min-height: 100dvh; background-color: #FFF8F7; -webkit-tap-highlight-colo
 </head>
 <body class="font-display min-h-screen text-m3-on-surface antialiased">
 
-<!-- ============ APP SHELL ============ -->
 <div id="app">
-
   <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-m3-surface pt-6 pb-2 px-4 transition-all duration-300" id="main-header">
     <div class="max-w-lg mx-auto w-full">
       <div class="flex justify-between items-center mb-5">
-        <!-- Logo Image -->
         <img src="logo.png" alt="Fleur d'Amour" class="h-10 object-contain"/>
-        
-        <!-- Instagram Button -->
         <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-m3-primary-container text-m3-on-primary-container flex items-center justify-center transition-transform active:scale-95">
           <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
@@ -82,17 +77,14 @@ body { min-height: 100dvh; background-color: #FFF8F7; -webkit-tap-highlight-colo
 
   <!-- MAIN CONTENT -->
   <main class="max-w-lg mx-auto w-full px-4 pt-4 pb-32">
-    <!-- Categories -->
     <section id="categories-section" class="mb-8">
       <div id="categories-bar" class="flex space-x-2 overflow-x-auto hide-scrollbar pb-1"></div>
     </section>
 
-    <!-- Banner -->
     <section id="banner-section" class="mb-8">
       <div id="banner-container"></div>
     </section>
 
-    <!-- Products Grid -->
     <section>
       <div class="flex justify-between items-end mb-5 px-1">
         <h2 id="section-title" class="text-2xl font-bold tracking-tight text-m3-on-surface">Para ti</h2>
@@ -114,49 +106,40 @@ body { min-height: 100dvh; background-color: #FFF8F7; -webkit-tap-highlight-colo
     </section>
   </main>
 
-  <!-- Bottom Navigation Floating Pill -->
+  <!-- Navigation -->
   <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-auto">
     <div class="bg-m3-surface-container/90 backdrop-blur-md shadow-m3-nav-pill rounded-full px-6 py-2.5 flex items-center gap-6">
-      
-      <!-- Home -->
       <button onclick="navigateTo('home')" class="nav-btn group relative flex items-center justify-center" data-target="home">
         <div class="w-11 h-11 rounded-full flex items-center justify-center transition-colors bg-m3-primary-container text-m3-on-primary-container nav-pill">
           <span class="material-icons-round text-[24px]">storefront</span>
         </div>
       </button>
-      
-      <!-- Browse -->
       <button onclick="navigateTo('browse')" class="nav-btn group relative flex items-center justify-center" data-target="browse">
         <div class="w-11 h-11 rounded-full flex items-center justify-center transition-colors text-m3-on-surface-variant nav-pill">
           <span class="material-icons-round text-[24px]">search</span>
         </div>
       </button>
-      
-      <!-- Cart -->
       <button onclick="showCart()" class="nav-btn group relative flex items-center justify-center" data-target="cart">
         <div class="w-11 h-11 rounded-full flex items-center justify-center transition-colors text-m3-on-surface-variant relative nav-pill">
           <span class="material-icons-round text-[24px]">shopping_cart</span>
           <span id="cart-badge-nav" class="hidden absolute top-0 right-0 h-4 w-4 bg-m3-primary text-m3-on-primary text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-m3-surface-container transform translate-x-1/4 -translate-y-1/4">0</span>
         </div>
       </button>
-
-      <!-- Profile -->
       <button onclick="showToast('Perfil próximamente')" class="nav-btn group relative flex items-center justify-center" data-target="profile">
         <div class="w-11 h-11 rounded-full flex items-center justify-center transition-colors text-m3-on-surface-variant nav-pill">
           <span class="material-icons-round text-[24px]">person</span>
         </div>
       </button>
-
     </div>
   </nav>
 </div>
 
-<!-- ============ PRODUCT DETAIL MODAL ============ -->
+<!-- PRODUCT DETAIL MODAL -->
 <div id="product-modal" class="fixed inset-0 z-50 hidden bg-m3-surface overflow-hidden flex flex-col">
   <div id="product-modal-content" class="flex-1 overflow-y-auto w-full max-w-lg mx-auto hide-scrollbar pb-32"></div>
 </div>
 
-<!-- ============ CART MODAL ============ -->
+<!-- CART MODAL -->
 <div id="cart-modal" class="fixed inset-0 z-50 hidden bg-m3-surface overflow-hidden flex flex-col">
   <div class="max-w-lg mx-auto w-full h-full flex flex-col relative">
     <div class="px-4 py-4 flex items-center justify-between sticky top-0 z-10 bg-m3-surface/90 backdrop-blur-md">
@@ -170,22 +153,21 @@ body { min-height: 100dvh; background-color: #FFF8F7; -webkit-tap-highlight-colo
   </div>
 </div>
 
-<!-- ============ SUPABASE + APP LOGIC ============ -->
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-const SUPABASE_URL = "https://tonzgawcuhrxetbfvust.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_s37mYvHnnE9ppfg857BsVg_Yx7-BkMm";
+const SUPABASE_URL = "https://kihsjtpzevgtqpckgeux.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpaHNqdHB6ZXZndHFwY2tnZXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MjEwMDksImV4cCI6MjA4NjQ5NzAwOX0.63iuNCkhfazNnjW_xWHQG_70YBsiewytcL0dzBvUFDc";
+const PHONE_NUMBER = "17049079361"; // Tu número de WhatsApp
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ── State ──
 let allProducts = [];
 let allSections = [];
 let cart = JSON.parse(localStorage.getItem('fleur-cart') || '[]');
 let activeCategory = 'all';
 
-// ── Expose to global ──
+// Expose to global
 window.addToCart = addToCart;
 window.addFromModal = addFromModal;
 window.removeFromCart = removeFromCart;
@@ -197,19 +179,8 @@ window.closeProductModal = closeProductModal;
 window.filterByCategory = filterByCategory;
 window.filterProducts = filterProducts;
 window.navigateTo = navigateTo;
-window.processOrder = processOrder; // New function
+window.processOrder = processOrder;
 window.showToast = showToast;
-
-// ── Logic ──
-
-const header = document.getElementById('main-header');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 20) {
-    header.classList.add('shadow-sm');
-  } else {
-    header.classList.remove('shadow-sm');
-  }
-});
 
 async function loadData() {
   try {
@@ -225,11 +196,6 @@ async function loadData() {
     updateCartUI();
   } catch (e) {
     console.error('Error loading data:', e);
-    document.getElementById('loading-skeleton').innerHTML = `
-      <div class="col-span-2 text-center py-20 text-m3-outline">
-        <p class="font-bold text-lg text-m3-on-surface">Error de conexión</p>
-        <button onclick="location.reload()" class="mt-6 px-6 py-3 bg-m3-primary text-m3-on-primary rounded-full text-sm font-bold">Reintentar</button>
-      </div>`;
   }
 }
 
@@ -245,14 +211,8 @@ function renderCategories() {
 
 function renderBanner() {
   const container = document.getElementById('banner-container');
-  // Buscar primero la destacada, luego cualquiera con imagen, y si no hay, la primera (fallback)
   const featured = allSections.find(s => s.featured) || allSections.find(s => s.bannerImage) || allSections[0];
-  
-  if (!featured || !featured.bannerImage) {
-    container.innerHTML = '';
-    return;
-  }
-  
+  if (!featured || !featured.bannerImage) { container.innerHTML = ''; return; }
   container.innerHTML = `
     <div onclick="filterByCategory('${featured.id}')" class="relative w-full aspect-[2/1] rounded-[28px] overflow-hidden group cursor-pointer">
       <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent z-10"></div>
@@ -269,95 +229,67 @@ function renderProducts() {
   const grid = document.getElementById('products-grid');
   const noProducts = document.getElementById('no-products');
   const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
-
   let filtered = allProducts;
   if (activeCategory !== 'all') filtered = filtered.filter(p => p.sectionId === activeCategory);
-  if (searchTerm) {
-    filtered = filtered.filter(p => (p.name || '').toLowerCase().includes(searchTerm) || (p.description || '').toLowerCase().includes(searchTerm));
-  }
-  filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0) || (a.order || 99) - (b.order || 99));
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '';
-    noProducts.classList.remove('hidden');
-    return;
-  }
+  if (searchTerm) filtered = filtered.filter(p => (p.name || '').toLowerCase().includes(searchTerm));
+  if (filtered.length === 0) { grid.innerHTML = ''; noProducts.classList.remove('hidden'); return; }
   noProducts.classList.add('hidden');
-
-  grid.innerHTML = filtered.map((p, i) => {
-    const hasDiscount = p.originalPrice && p.originalPrice > p.price;
-    const discountPct = hasDiscount ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
-    
-    return `
+  grid.innerHTML = filtered.map((p, i) => `
     <div onclick="showProductDetail('${p.id}')" class="bg-m3-surface-container-lowest border border-m3-surface-container-highest rounded-[28px] p-2.5 flex flex-col h-full cursor-pointer hover:shadow-m3-elevation-1 transition-all fade-in" style="animation-delay: ${i * 40}ms">
       <div class="relative aspect-[4/5] rounded-[20px] overflow-hidden bg-m3-surface-container mb-3">
-        ${hasDiscount ? `<span class="absolute top-2 left-2 bg-[#BA1A1A] text-white text-[10px] font-bold px-2 py-1 rounded-full z-10 shadow-sm">-${discountPct}%</span>` : ''}
-        ${p.badge && !hasDiscount ? `<span class="absolute top-2 left-2 bg-m3-primary-container text-m3-on-primary-container text-[10px] font-bold px-2 py-1 rounded-full z-10">${p.badge}</span>` : ''}
         <img alt="${p.name}" class="w-full h-full object-cover" src="${p.images ? p.images[0] : (p.image || '')}" loading="lazy"/>
-        <button onclick="event.stopPropagation(); toggleFavorite(this)" class="absolute top-2 right-2 w-8 h-8 bg-white/60 backdrop-blur-md rounded-full flex items-center justify-center text-m3-on-surface-variant hover:text-m3-primary hover:bg-white transition-colors">
-          <span class="material-icons-round text-[18px]">favorite_border</span>
-        </button>
       </div>
       <div class="px-2 pb-1 flex flex-col flex-grow">
         <h3 class="text-sm font-bold text-m3-on-surface leading-tight mb-1 line-clamp-2">${p.name}</h3>
         <div class="mt-auto pt-2 flex items-end justify-between">
-          <div class="flex flex-col">
-            ${hasDiscount ? `<span class="text-[11px] text-m3-outline line-through leading-none mb-0.5">$${p.originalPrice.toFixed(2)}</span>` : ''}
-            <span class="text-lg font-extrabold text-m3-on-surface leading-none">$${p.price.toFixed(2)}</span>
-          </div>
-          <button onclick="event.stopPropagation(); addToCart('${p.id}')" class="w-10 h-10 rounded-[12px] bg-m3-primary-container text-m3-on-primary-container flex items-center justify-center hover:bg-[#FFB4AB] transition-colors shrink-0">
+          <span class="text-lg font-extrabold text-m3-on-surface leading-none">$${p.price.toFixed(2)}</span>
+          <button onclick="event.stopPropagation(); addToCart('${p.id}')" class="w-10 h-10 rounded-[12px] bg-m3-primary-container text-m3-on-primary-container flex items-center justify-center transition-colors shrink-0">
             <span class="material-icons-round text-xl">add</span>
           </button>
         </div>
       </div>
-    </div>`;
-  }).join('');
+    </div>`).join('');
 }
 
 function showProductDetail(productId) {
   const p = allProducts.find(x => x.id === productId);
   if (!p) return;
   const section = allSections.find(s => s.id === p.sectionId);
-  const hasDiscount = p.originalPrice && p.originalPrice > p.price;
   const images = p.images || [p.image || ''];
-
   const modal = document.getElementById('product-modal');
   const content = document.getElementById('product-modal-content');
   modal.classList.remove('hidden', 'slide-down-full');
   modal.classList.add('slide-up-full');
-
   content.innerHTML = `
     <div class="sticky top-0 z-20 bg-m3-surface/80 backdrop-blur-lg px-4 py-4 flex items-center justify-between">
-       <button onclick="closeProductModal()" class="w-12 h-12 bg-m3-surface-container-high rounded-full flex items-center justify-center text-m3-on-surface transition-colors hover:bg-m3-surface-variant"><span class="material-icons-round">arrow_back</span></button>
-       <button class="w-12 h-12 bg-m3-surface-container-high rounded-full flex items-center justify-center text-m3-on-surface transition-colors hover:bg-m3-surface-variant"><span class="material-icons-round">favorite_border</span></button>
+       <button onclick="closeProductModal()" class="w-12 h-12 bg-m3-surface-container-high rounded-full flex items-center justify-center text-m3-on-surface"><span class="material-icons-round">arrow_back</span></button>
     </div>
     <div class="relative w-full aspect-[4/5] -mt-20">
       <img id="detail-main-img" alt="${p.name}" class="w-full h-full object-cover rounded-b-[40px] shadow-sm" src="${images[0]}"/>
-      ${images.length > 1 ? `<div class="absolute bottom-6 left-0 w-full flex justify-center gap-2 z-10">${images.map((img, i) => `<button onclick="document.getElementById('detail-main-img').src='${img}'" class="w-2.5 h-2.5 rounded-full ${i === 0 ? 'bg-m3-on-primary scale-125' : 'bg-m3-on-primary/50'} transition-all"></button>`).join('')}</div>` : ''}
     </div>
-    <div class="px-6 pt-8">
-      <div class="mb-6">
-        <div class="flex justify-between items-start gap-4">
-          <h1 class="text-3xl font-extrabold text-m3-on-surface leading-tight tracking-tight">${p.name}</h1>
-          <div class="text-right shrink-0">
-            ${hasDiscount ? `<span class="text-sm text-m3-outline line-through block mb-1">$${p.originalPrice.toFixed(2)}</span>` : ''}
-            <span class="text-3xl font-extrabold text-m3-primary">$${p.price.toFixed(2)}</span>
-          </div>
+    <div class="px-6 pt-8 pb-40">
+      <h1 class="text-3xl font-extrabold text-m3-on-surface leading-tight">${p.name}</h1>
+      <span class="text-3xl font-extrabold text-m3-primary block mt-2">$${p.price.toFixed(2)}</span>
+      <p class="text-m3-on-surface-variant mt-4 text-[15px] font-medium leading-relaxed">${p.description || ''}</p>
+      ${p.options && p.options.length > 0 ? `<div class="mt-8">
+        <h3 class="text-sm font-bold text-m3-on-surface mb-3 uppercase tracking-wider">Opciones</h3>
+        <div class="grid grid-cols-1 gap-3">
+          ${p.options.map((opt, i) => `
+            <label class="relative cursor-pointer">
+              <input ${i === 0 ? 'checked' : ''} class="peer sr-only" name="product-option" type="radio" value="${opt.name}" onchange="updateDetailPrice('${p.id}', ${opt.extraPrice || 0})"/>
+              <div class="p-4 rounded-[16px] border-2 border-m3-surface-container-highest bg-m3-surface-container-lowest peer-checked:border-m3-primary peer-checked:bg-m3-primary-container transition-all flex justify-between items-center">
+                <span class="font-bold text-m3-on-surface">${opt.name}</span>
+                <span class="text-sm font-extrabold text-m3-primary">${opt.extraPrice ? `+$${opt.extraPrice.toFixed(2)}` : 'Incluido'}</span>
+              </div>
+            </label>`).join('')}
         </div>
-        ${section ? `<div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-m3-surface-variant text-m3-on-surface-variant rounded-full text-xs font-bold uppercase tracking-wider"><span class="material-icons-round text-[14px]">local_offer</span>${section.name}</div>` : ''}
-      </div>
-      ${p.description ? `<div class="mb-8"><p class="text-m3-on-surface-variant leading-relaxed text-[15px] font-medium">${p.description}</p></div>` : ''}
-      ${p.options && p.options.length > 0 ? `<div class="mb-8"><h3 class="text-sm font-bold text-m3-on-surface mb-3 uppercase tracking-wider">Opciones</h3><div class="grid grid-cols-1 gap-3">${p.options.map((opt, i) => `<label class="relative cursor-pointer group"><input ${i === 0 ? 'checked' : ''} class="peer sr-only" name="product-option" type="radio" value="${opt.name}" onchange="updateDetailPrice('${p.id}', ${opt.extraPrice || 0})"/><div class="p-4 rounded-[16px] border-2 border-m3-surface-container-highest bg-m3-surface-container-lowest peer-checked:border-m3-primary peer-checked:bg-m3-primary-container transition-all flex justify-between items-center"><span class="font-bold text-m3-on-surface peer-checked:text-m3-on-primary-container">${opt.name}</span>${opt.extraPrice ? `<span class="text-sm font-extrabold text-m3-primary peer-checked:text-m3-on-primary-container">+$${opt.extraPrice.toFixed(2)}</span>` : `<span class="text-sm text-m3-outline peer-checked:text-m3-on-primary-container">Incluido</span>`}</div></label>`).join('')}</div></div>` : ''}
-      <div class="bg-m3-surface-container rounded-[24px] p-5 flex items-start gap-4">
-        <div class="w-12 h-12 rounded-full bg-[#EADDFF] flex items-center justify-center text-[#21005D] shrink-0"><span class="material-icons-round">local_shipping</span></div>
-        <div><p class="font-bold text-m3-on-surface">Entrega local en Charlotte</p><p class="text-sm text-m3-on-surface-variant mt-1">Los pedidos antes de las 2 PM se entregan el mismo día.</p></div>
-      </div>
+      </div>` : ''}
     </div>
-    <div class="fixed bottom-0 left-0 w-full bg-gradient-to-t from-m3-surface via-m3-surface to-transparent pt-12 pb-6 px-6 z-30 pointer-events-none">
-      <div class="max-w-lg mx-auto pointer-events-auto">
-        <button onclick="addFromModal('${p.id}'); closeProductModal();" class="w-full bg-m3-on-surface text-m3-surface rounded-full py-5 px-6 flex items-center justify-between shadow-m3-elevation-3 active:scale-[0.98] transition-transform">
-          <div class="flex flex-col text-left"><span class="text-[11px] font-medium text-m3-surface/70 uppercase tracking-widest">Añadir al pedido</span><span id="detail-total" class="text-xl font-extrabold">$${p.price.toFixed(2)}</span></div>
-          <div class="w-12 h-12 bg-m3-surface/20 rounded-full flex items-center justify-center"><span class="material-icons-round text-2xl">shopping_cart_checkout</span></div>
+    <div class="fixed bottom-0 left-0 w-full bg-m3-surface/80 backdrop-blur-md p-6 z-30">
+      <div class="max-w-lg mx-auto">
+        <button onclick="addFromModal('${p.id}')" class="w-full bg-m3-on-surface text-m3-surface rounded-full py-5 px-6 flex items-center justify-between shadow-m3-elevation-3">
+          <div class="flex flex-col text-left"><span class="text-[11px] font-medium text-m3-surface/70 uppercase">Añadir</span><span id="detail-total" class="text-xl font-extrabold">$${p.price.toFixed(2)}</span></div>
+          <span class="material-icons-round text-2xl">shopping_cart</span>
         </button>
       </div>
     </div>`;
@@ -371,7 +303,6 @@ window.updateDetailPrice = function(productId, extra) {
 
 function closeProductModal() {
   const modal = document.getElementById('product-modal');
-  modal.classList.remove('slide-up-full');
   modal.classList.add('slide-down-full');
   setTimeout(() => { modal.classList.add('hidden'); document.body.style.overflow = ''; }, 300);
 }
@@ -381,12 +312,11 @@ function addFromModal(productId) {
   if (!p) return;
   let selectedOption = null;
   const radios = document.getElementsByName('product-option');
-  if (p.options && p.options.length > 0 && radios.length > 0) {
-    for (const r of radios) {
-      if (r.checked) { selectedOption = p.options.find(o => o.name === r.value); break; }
-    }
+  if (p.options && p.options.length > 0) {
+    for (const r of radios) { if (r.checked) { selectedOption = p.options.find(o => o.name === r.value); break; } }
   }
   addToCart(productId, selectedOption);
+  closeProductModal();
 }
 
 function addToCart(productId, option = null) {
@@ -399,205 +329,143 @@ function addToCart(productId, option = null) {
   saveCart(); updateCartUI(); showToast(`Añadido al carrito`);
 }
 
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  saveCart(); updateCartUI(); renderCartContent();
+function removeFromCart(index) { cart.splice(index, 1); saveCart(); updateCartUI(); renderCartContent(); }
+function updateCartQty(index, delta) { 
+  cart[index].qty += delta; 
+  if (cart[index].qty <= 0) { removeFromCart(index); } else { saveCart(); updateCartUI(); renderCartContent(); }
 }
-
-function updateCartQty(index, delta) {
-  const item = cart[index];
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) { removeFromCart(index); return; }
-  saveCart(); updateCartUI(); renderCartContent();
-}
-
 function saveCart() { localStorage.setItem('fleur-cart', JSON.stringify(cart)); }
-
 function updateCartUI() {
   const total = cart.reduce((s, c) => s + c.qty, 0);
   const badgeNav = document.getElementById('cart-badge-nav');
-  if (total > 0) { badgeNav.classList.remove('hidden'); badgeNav.textContent = total > 9 ? '9+' : total; } else { badgeNav.classList.add('hidden'); }
+  if (total > 0) { badgeNav.classList.remove('hidden'); badgeNav.textContent = total; } else { badgeNav.classList.add('hidden'); }
 }
 
-function showCart() {
-  renderCartContent();
-  const modal = document.getElementById('cart-modal');
-  modal.classList.remove('hidden', 'slide-down-full');
-  modal.classList.add('slide-up-full');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeCart() {
-  const modal = document.getElementById('cart-modal');
-  modal.classList.remove('slide-up-full');
-  modal.classList.add('slide-down-full');
-  setTimeout(() => { modal.classList.add('hidden'); document.body.style.overflow = ''; }, 300);
-}
+function showCart() { renderCartContent(); document.getElementById('cart-modal').classList.remove('hidden'); document.getElementById('cart-modal').classList.add('slide-up-full'); }
+function closeCart() { document.getElementById('cart-modal').classList.add('hidden'); }
 
 function renderCartContent() {
   const container = document.getElementById('cart-content');
-  if (cart.length === 0) {
-    container.innerHTML = `
-      <div class="h-full flex flex-col items-center justify-center text-m3-outline pt-20">
-        <div class="w-32 h-32 bg-m3-surface-variant rounded-full flex items-center justify-center mb-6"><span class="material-icons-round text-6xl text-m3-outline-variant">shopping_bag</span></div>
-        <h3 class="font-extrabold text-2xl text-m3-on-surface mb-2">Carrito vacío</h3>
-        <p class="text-m3-on-surface-variant text-center mb-10 px-6">Agrega arreglos florales y regalos para sorprender a esa persona especial.</p>
-        <button onclick="closeCart()" class="px-8 py-4 bg-m3-primary-container text-m3-on-primary-container rounded-full font-bold text-lg">Explorar Arreglos</button>
-      </div>`;
-    return;
-  }
+  if (cart.length === 0) { container.innerHTML = '<div class="text-center pt-20">Carrito vacío</div>'; return; }
   let subtotal = 0;
   const shipping = 15;
-  let itemsHtml = '';
-  cart.forEach((c, index) => {
+  let itemsHtml = cart.map((c, index) => {
     const p = allProducts.find(x => x.id === c.id);
-    if (!p) return;
-    const unitPrice = p.price + (c.optionPrice || 0);
-    const itemTotal = unitPrice * c.qty;
-    subtotal += itemTotal;
-    const img = p.images ? p.images[0] : (p.image || '');
-    itemsHtml += `
-    <article class="bg-m3-surface-container rounded-[24px] p-3 flex gap-4 items-center mb-3">
-      <div class="w-24 h-24 shrink-0 rounded-[16px] overflow-hidden bg-m3-surface-variant"><img alt="${p.name}" class="w-full h-full object-cover" src="${img}"/></div>
-      <div class="flex-1 min-w-0 py-1">
-        <div class="flex justify-between items-start mb-1">
-          <h3 class="font-bold text-m3-on-surface truncate pr-2 text-[15px]">${p.name}</h3>
-          <button onclick="removeFromCart(${index})" class="text-m3-outline hover:text-[#BA1A1A] transition-colors shrink-0 -mt-1 -mr-1 p-2"><span class="material-icons-round text-sm">close</span></button>
-        </div>
-        ${c.optionName ? `<div class="text-xs font-bold text-m3-on-surface-variant bg-m3-surface-variant/50 px-2 py-0.5 rounded-md inline-block mb-1">${c.optionName} ${c.optionPrice > 0 ? `(+$${c.optionPrice.toFixed(2)})` : ''}</div>` : ''}
-        <span class="font-extrabold text-m3-primary text-lg block mb-2">$${itemTotal.toFixed(2)}</span>
-        <div class="flex items-center gap-3">
-          <div class="flex items-center bg-m3-surface-container-highest rounded-full">
-            <button onclick="updateCartQty(${index}, -1)" class="w-8 h-8 flex items-center justify-center text-m3-on-surface font-bold hover:bg-black/5 rounded-full"><span class="material-icons-round text-sm">remove</span></button>
-            <span class="text-sm font-bold w-6 text-center text-m3-on-surface">${c.qty}</span>
-            <button onclick="updateCartQty(${index}, 1)" class="w-8 h-8 flex items-center justify-center text-m3-on-surface font-bold hover:bg-black/5 rounded-full"><span class="material-icons-round text-sm">add</span></button>
-          </div>
+    const itemPrice = (p.price + (c.optionPrice || 0)) * c.qty;
+    subtotal += itemPrice;
+    return `
+    <div class="bg-m3-surface-container rounded-[24px] p-3 flex gap-4 items-center mb-3">
+      <img src="${p.images?.[0] || p.image}" class="w-20 h-20 rounded-[16px] object-cover"/>
+      <div class="flex-1">
+        <h3 class="font-bold text-sm">${p.name}</h3>
+        ${c.optionName ? `<p class="text-[10px] text-m3-outline">${c.optionName}</p>` : ''}
+        <p class="font-extrabold text-m3-primary">$${itemPrice.toFixed(2)}</p>
+        <div class="flex items-center gap-3 mt-2">
+          <button onclick="updateCartQty(${index}, -1)" class="w-6 h-6 bg-m3-surface-variant rounded-full">-</button>
+          <span class="text-xs font-bold">${c.qty}</span>
+          <button onclick="updateCartQty(${index}, 1)" class="w-6 h-6 bg-m3-surface-variant rounded-full">+</button>
         </div>
       </div>
-    </article>`;
-  });
-  const total = subtotal + shipping;
+    </div>`;
+  }).join('');
+  
   container.innerHTML = `
-    <div class="mb-6">${itemsHtml}</div>
-    <div class="bg-m3-surface-container-low border border-m3-surface-container-high rounded-[28px] p-6 mb-8">
-      <div class="flex items-center gap-2 mb-5">
-        <div class="w-8 h-8 bg-m3-primary-container text-m3-on-primary-container rounded-full flex items-center justify-center"><span class="material-icons-round text-[16px]">local_shipping</span></div>
-        <h3 class="text-lg font-bold text-m3-on-surface">Datos de Entrega</h3>
-      </div>
-      <div class="space-y-4">
-        <div class="relative">
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Para quién</label>
-          <input id="cart-recipient" class="w-full bg-m3-surface-container-lowest border-2 border-m3-surface-container-highest focus:border-m3-primary rounded-[16px] px-4 py-3.5 text-sm focus:ring-0 transition-colors" placeholder="Ej. María García" type="text"/>
-        </div>
-        <div class="relative">
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Dirección (Charlotte)</label>
-          <input id="cart-address" class="w-full bg-m3-surface-container-lowest border-2 border-m3-surface-container-highest focus:border-m3-primary rounded-[16px] px-4 py-3.5 text-sm focus:ring-0 transition-colors" placeholder="Ej. 123 Tryon St" type="text"/>
-        </div>
-        <div class="relative">
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Mensaje para la Tarjeta</label>
-          <textarea id="cart-message" class="w-full bg-m3-surface-container-lowest border-2 border-m3-surface-container-highest focus:border-m3-primary rounded-[16px] px-4 py-3.5 text-sm focus:ring-0 transition-colors resize-none" placeholder="Escribe algo especial..." rows="2"></textarea>
-        </div>
-      </div>
+    ${itemsHtml}
+    <div class="mt-6 p-5 bg-m3-surface-container-low rounded-[24px]">
+      <input id="cart-recipient" class="w-full bg-white border-none rounded-xl p-3 text-sm mb-3" placeholder="Para quién..."/>
+      <input id="cart-address" class="w-full bg-white border-none rounded-xl p-3 text-sm mb-3" placeholder="Dirección en Charlotte..."/>
+      <textarea id="cart-message" class="w-full bg-white border-none rounded-xl p-3 text-sm" placeholder="Mensaje..."></textarea>
     </div>
-    <div class="px-2 mb-10">
-      <h3 class="text-lg font-bold text-m3-on-surface mb-3">Resumen</h3>
-      <div class="flex justify-between items-center py-1.5 text-[15px] font-medium text-m3-on-surface-variant"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
-      <div class="flex justify-between items-center py-1.5 text-[15px] font-medium text-m3-on-surface-variant"><span>Envío local</span><span>$${shipping.toFixed(2)}</span></div>
-      <div class="flex justify-between items-center pt-4 mt-2 border-t-2 border-m3-surface-container-high">
-        <span class="font-extrabold text-m3-on-surface text-xl">Total</span>
-        <span class="font-extrabold text-m3-primary text-2xl">$${total.toFixed(2)}</span>
-      </div>
+    <div class="mt-6 p-2">
+      <div class="flex justify-between text-sm"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+      <div class="flex justify-between text-sm"><span>Envío</span><span>$${shipping.toFixed(2)}</span></div>
+      <div class="flex justify-between text-xl font-bold mt-2"><span>Total</span><span>$${(subtotal + shipping).toFixed(2)}</span></div>
     </div>
-    <div class="fixed bottom-0 left-0 w-full bg-gradient-to-t from-m3-surface via-m3-surface to-transparent pt-12 pb-6 px-4 z-30 pointer-events-none">
-      <div class="max-w-lg mx-auto pointer-events-auto">
-        <button id="btn-checkout" onclick="processOrder()" class="w-full bg-[#128C7E] hover:bg-[#075E54] text-white rounded-full py-5 flex items-center justify-center gap-3 shadow-m3-elevation-3 transition-transform active:scale-[0.98]">
-          <span class="font-bold text-lg">Confirmar Pedido (WhatsApp)</span>
-          <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        </button>
-      </div>
+    <div class="fixed bottom-0 left-0 w-full p-4 bg-m3-surface">
+      <button id="btn-checkout" onclick="processOrder()" class="w-full bg-[#128C7E] text-white py-4 rounded-full font-bold shadow-lg">Confirmar WhatsApp</button>
     </div>`;
 }
 
-// ── Navigation & Nav UI Update ──
+// ── processOrder Implementada Correctamente ──
+async function processOrder() {
+  const recipient = document.getElementById('cart-recipient').value.trim();
+  const address = document.getElementById('cart-address').value.trim();
+  const message = document.getElementById('cart-message').value.trim();
+
+  if (!recipient || !address) { showToast('Faltan datos de entrega'); return; }
+
+  const checkoutBtn = document.getElementById('btn-checkout');
+  checkoutBtn.disabled = true;
+  checkoutBtn.textContent = "Procesando...";
+
+  try {
+    let subtotal = 0;
+    const itemsData = cart.map(c => {
+      const p = allProducts.find(x => x.id === c.id);
+      const unitPrice = p.price + (c.optionPrice || 0);
+      const totalItem = unitPrice * c.qty;
+      subtotal += totalItem;
+      return { 
+        product_id: c.id, 
+        product_name: p.name, 
+        quantity: c.qty, 
+        option_name: c.optionName, 
+        unit_price: unitPrice, 
+        total_price: totalItem 
+      };
+    });
+
+    const totalAmount = subtotal + 15;
+
+    // 1. Guardar en Supabase (para que aparezca en el admin)
+    const { data, error } = await supabase.from('orders').insert([{
+      customer_name: recipient,
+      customer_address: address,
+      customer_message: message,
+      items: itemsData,
+      total_amount: totalAmount,
+      status: 'pendiente'
+    }]).select();
+
+    if (error) throw error;
+
+    // 2. Preparar mensaje de WhatsApp
+    let waText = `¡Hola Fleur d'Amour! 🌸\n\nHe realizado un nuevo pedido:\n`;
+    itemsData.forEach(i => {
+      waText += `- ${i.quantity}x ${i.product_name} ${i.option_name ? `(${i.option_name})` : ''}: $${i.total_price.toFixed(2)}\n`;
+    });
+    waText += `\n*Total (con envío): $${totalAmount.toFixed(2)}*\n\n`;
+    waText += `*Entregar a:* ${recipient}\n`;
+    waText += `*Dirección:* ${address}\n`;
+    if (message) waText += `*Nota:* ${message}`;
+
+    // 3. Limpiar carrito y redirigir
+    localStorage.removeItem('fleur-cart');
+    cart = [];
+    updateCartUI();
+    window.location.href = `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(waText)}`;
+
+  } catch (e) {
+    console.error(e);
+    showToast('Error al procesar pedido');
+    checkoutBtn.disabled = false;
+    checkoutBtn.textContent = "Confirmar WhatsApp";
+  }
+}
+
 function navigateTo(page) {
-  // Update Bottom Nav UI
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    const pill = btn.querySelector('.nav-pill');
-    
-    if (btn.dataset.target === page) {
-      pill.classList.add('bg-m3-primary-container', 'text-m3-on-primary-container');
-      pill.classList.remove('text-m3-on-surface-variant');
-    } else if (btn.dataset.target !== 'cart') { 
-      // Reset inactive tabs (except cart if it has custom styling, though here all use same base)
-      pill.classList.remove('bg-m3-primary-container', 'text-m3-on-primary-container');
-      pill.classList.add('text-m3-on-surface-variant');
-    }
-  });
-
-  if (page === 'home') {
-    activeCategory = 'all';
-    document.getElementById('search-input').value = '';
-    document.getElementById('section-title').textContent = 'Para ti';
-    renderCategories();
-    renderProducts();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } else if (page === 'browse') {
-    document.getElementById('search-input').focus();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  if (page === 'home') { activeCategory = 'all'; renderProducts(); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ── Filters ──
-function filterByCategory(categoryId) {
-  activeCategory = categoryId;
-  const title = document.getElementById('section-title');
-  if (categoryId === 'all') {
-    title.textContent = 'Para ti';
-  } else {
-    const sec = allSections.find(s => s.id === categoryId);
-    title.textContent = sec ? sec.name : 'Arreglos';
-  }
-  renderCategories();
-  renderProducts();
+function filterByCategory(id) { activeCategory = id; renderCategories(); renderProducts(); }
+function filterProducts() { renderProducts(); }
+function showToast(m) { 
+  const t = document.createElement('div'); 
+  t.className = "fixed bottom-24 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-2 rounded-full text-sm z-[100]";
+  t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 2000);
 }
 
-function filterProducts() {
-  renderProducts();
-  const title = document.getElementById('section-title');
-  if(document.getElementById('search-input').value.trim() !== "") {
-    title.textContent = 'Resultados';
-  } else {
-    filterByCategory(activeCategory); // reset title
-  }
-}
-
-// ── Toast (M3 Snackbar) ──
-function showToast(msg) {
-  const existing = document.getElementById('toast');
-  if (existing) existing.remove();
-  const toast = document.createElement('div');
-  toast.id = 'toast';
-  toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] bg-[#313033] text-[#F4EFF4] px-4 py-3 rounded-[8px] shadow-lg fade-in text-sm font-medium flex items-center gap-2';
-  toast.innerHTML = `<span class="material-icons-round text-[18px]">check_circle</span>${msg}`;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2500);
-}
-
-window.toggleFavorite = function(btn) {
-  const icon = btn.querySelector('span');
-  if (icon.textContent === 'favorite_border') {
-    icon.textContent = 'favorite';
-    btn.classList.remove('text-m3-on-surface-variant');
-    btn.classList.add('text-m3-primary');
-  } else {
-    icon.textContent = 'favorite_border';
-    btn.classList.add('text-m3-on-surface-variant');
-    btn.classList.remove('text-m3-primary');
-  }
-};
-
-// ── Init ──
 loadData();
 </script>
 </body>
