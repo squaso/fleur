@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fleur d'Amour — Panel de Administración (M3)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        /* Material Design 3 Expressive Tonal Palette (Based on Crimson/Rose) */
+        "m3-primary": "#BA1A1A",
+        "m3-on-primary": "#FFFFFF",
+        "m3-primary-container": "#FFDAD6",
+        "m3-on-primary-container": "#410002",
+        "m3-surface": "#FFF8F7",
+        "m3-surface-variant": "#F4DDDD",
+        "m3-on-surface": "#201A1A",
+        "m3-on-surface-variant": "#534341",
+        "m3-outline": "#857371",
+        "m3-outline-variant": "#D8C2C0",
+        "m3-surface-container-lowest": "#FFFFFF",
+        "m3-surface-container-low": "#FEF1F0",
+        "m3-surface-container": "#F9EBEA",
+        "m3-surface-container-high": "#F3E5E4",
+        "m3-surface-container-highest": "#EDDFDE",
+        "m3-error": "#BA1A1A",
+      },
+      fontFamily: { "display": ["Plus Jakarta Sans", "sans-serif"] },
+    },
+  },
+}
+</script>
+<style>
+body { min-height: 100dvh; background-color: #FFF8F7; } /* bg-m3-surface */
+.fade-in { animation: fadeIn 0.3s cubic-bezier(0.2, 0, 0, 1); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.modal-overlay { animation: overlayIn 0.2s ease-out; }
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+/* M3 Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D8C2C0; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #857371; }
+</style>
+</head>
+<body class="font-display text-m3-on-surface antialiased selection:bg-m3-primary-container selection:text-m3-on-primary-container">
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="login-screen" class="min-h-screen flex items-center justify-center bg-m3-surface-container p-4 relative overflow-hidden">
+  <!-- Decorative expressive shapes -->
+  <div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-m3-primary-container rounded-full opacity-50 blur-3xl mix-blend-multiply"></div>
+  <div class="absolute bottom-[-10%] right-[-10%] w-[30vw] h-[30vw] bg-[#FFB4AB] rounded-full opacity-40 blur-3xl mix-blend-multiply"></div>
+
+  <div class="bg-m3-surface rounded-[28px] shadow-lg p-10 w-full max-w-sm text-center relative z-10">
+    <div class="w-16 h-16 bg-m3-primary-container text-m3-on-primary-container rounded-[16px] flex items-center justify-center mx-auto mb-6 transform rotate-3">
+      <span class="material-icons-round text-3xl">local_florist</span>
+    </div>
+    <h1 class="text-2xl font-bold mb-1 tracking-tight">Fleur d'Amour</h1>
+    <p class="text-m3-on-surface-variant text-sm mb-8">Panel de Administración</p>
+    
+    <div class="space-y-5 text-left">
+      <div>
+        <label class="block text-xs font-semibold text-m3-on-surface-variant mb-1.5 ml-1">Email</label>
+        <input id="login-email" type="email" class="w-full bg-transparent border-2 border-m3-outline-variant rounded-[12px] px-4 py-3.5 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="admin@fleurdamour.com"/>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-m3-on-surface-variant mb-1.5 ml-1">Contraseña</label>
+        <input id="login-password" type="password" class="w-full bg-transparent border-2 border-m3-outline-variant rounded-[12px] px-4 py-3.5 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"/>
+      </div>
+      <p id="login-error" class="text-m3-error text-xs font-medium hidden bg-[#FFDAD6] p-3 rounded-xl"></p>
+      
+      <button onclick="login()" class="w-full bg-m3-primary hover:bg-[#93000A] text-m3-on-primary font-bold py-3.5 rounded-full transition-colors mt-2 shadow-sm hover:shadow-md">
+        Iniciar Sesión
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ADMIN DASHBOARD ============ -->
+<div id="admin-dashboard" class="hidden min-h-screen bg-m3-surface">
+  <!-- Top App Bar (M3 Center Aligned or Small) -->
+  <header class="sticky top-0 z-40 bg-m3-surface/90 backdrop-blur-md border-b border-m3-outline-variant/30 px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-m3-on-surface-variant hover:bg-m3-surface-variant rounded-full transition-colors">
+        <span class="material-icons-round">menu</span>
+      </button>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-m3-primary-container text-m3-on-primary-container rounded-[10px] flex items-center justify-center">
+          <span class="material-icons-round text-lg">local_florist</span>
+        </div>
+        <h1 class="text-[1.1rem] font-bold tracking-tight">Fleur d'Amour <span class="text-m3-outline font-normal text-sm ml-1">Admin</span></h1>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="index.html" target="_blank" class="hidden sm:flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-m3-on-surface-variant hover:bg-m3-surface-variant rounded-full transition-colors">
+        <span class="material-icons-round text-[18px]">open_in_new</span> Tienda
+      </a>
+      <button onclick="logout()" class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-m3-on-surface-variant hover:bg-[#FFDAD6] hover:text-[#410002] rounded-full transition-colors">
+        <span class="material-icons-round text-[18px]">logout</span> <span class="hidden sm:inline">Salir</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="flex max-w-[1400px] mx-auto">
+    <!-- Navigation Drawer (Sidebar) -->
+    <aside id="sidebar" class="hidden lg:block w-72 bg-m3-surface min-h-[calc(100vh-65px)] px-4 py-6 sticky top-[65px]">
+      <nav class="space-y-2">
+        <button onclick="switchTab('sections')" id="tab-sections" class="admin-tab w-full flex items-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-colors">
+          <span class="material-icons-round text-[20px]">dashboard</span> Secciones
+        </button>
+        <button onclick="switchTab('products')" id="tab-products" class="admin-tab w-full flex items-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-colors">
+          <span class="material-icons-round text-[20px]">inventory_2</span> Productos
+        </button>
+        <button onclick="switchTab('orders')" id="tab-orders" class="admin-tab w-full flex items-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-colors">
+          <span class="material-icons-round text-[20px]">receipt_long</span> Pedidos
+        </button>
+        <button onclick="switchTab('history')" id="tab-history" class="admin-tab w-full flex items-center gap-3 px-5 py-4 rounded-full text-sm font-medium transition-colors">
+          <span class="material-icons-round text-[20px]">history</span> Historial
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Mobile Navigation Bar (M3 Bottom App Bar) -->
+    <div class="lg:hidden fixed bottom-0 w-full z-40 bg-m3-surface-container pb-safe border-t border-m3-outline-variant/30 flex px-2 pt-2 pb-1 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+      <button onclick="switchTab('sections')" id="mtab-sections" class="flex-1 flex flex-col items-center py-2 relative group">
+        <div id="mtab-sections-pill" class="w-16 h-8 rounded-full flex items-center justify-center transition-colors mb-1">
+          <span class="material-icons-round text-xl">dashboard</span>
+        </div>
+        <span class="text-[11px] font-medium">Secciones</span>
+      </button>
+      <button onclick="switchTab('products')" id="mtab-products" class="flex-1 flex flex-col items-center py-2 relative group">
+        <div id="mtab-products-pill" class="w-16 h-8 rounded-full flex items-center justify-center transition-colors mb-1">
+          <span class="material-icons-round text-xl">inventory_2</span>
+        </div>
+        <span class="text-[11px] font-medium">Productos</span>
+      </button>
+      <button onclick="switchTab('orders')" id="mtab-orders" class="flex-1 flex flex-col items-center py-2 relative group">
+        <div id="mtab-orders-pill" class="w-16 h-8 rounded-full flex items-center justify-center transition-colors mb-1">
+          <span class="material-icons-round text-xl">receipt_long</span>
+        </div>
+        <span class="text-[11px] font-medium">Pedidos</span>
+      </button>
+      <button onclick="switchTab('history')" id="mtab-history" class="flex-1 flex flex-col items-center py-2 relative group">
+        <div id="mtab-history-pill" class="w-16 h-8 rounded-full flex items-center justify-center transition-colors mb-1">
+          <span class="material-icons-round text-xl">history</span>
+        </div>
+        <span class="text-[11px] font-medium">Historial</span>
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-4 sm:p-8 pb-28 lg:pb-8 w-full max-w-5xl mx-auto">
+
+      <!-- ═══ SECTIONS TAB ═══ -->
+      <div id="panel-sections" class="fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight">Categorías</h2>
+            <p class="text-sm text-m3-on-surface-variant mt-1">Organiza tus colecciones florales</p>
+          </div>
+          <!-- M3 Extended FAB -->
+          <button onclick="openSectionModal()" class="bg-m3-primary-container hover:bg-[#FFB4AB] text-m3-on-primary-container font-semibold px-6 py-4 rounded-[16px] flex items-center gap-2 transition-all shadow-sm hover:shadow-md text-sm w-max">
+            <span class="material-icons-round text-[20px]">add</span> Nueva Sección
+          </button>
+        </div>
+        <div id="sections-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated by JS -->
+        </div>
+        <div id="sections-empty" class="hidden text-center py-20 text-m3-outline">
+          <div class="w-24 h-24 bg-m3-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons-round text-5xl text-m3-outline-variant">category</span>
+          </div>
+          <p class="font-bold text-lg text-m3-on-surface-variant">No hay secciones</p>
+          <p class="text-sm">Crea tu primera categoría para organizar productos</p>
+        </div>
+      </div>
+
+      <!-- ═══ PRODUCTS TAB ═══ -->
+      <div id="panel-products" class="hidden fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight">Productos</h2>
+            <p class="text-sm text-m3-on-surface-variant mt-1">Gestiona tu catálogo de arreglos</p>
+          </div>
+          <button onclick="openProductModal()" class="bg-m3-primary-container hover:bg-[#FFB4AB] text-m3-on-primary-container font-semibold px-6 py-4 rounded-[16px] flex items-center gap-2 transition-all shadow-sm hover:shadow-md text-sm w-max">
+            <span class="material-icons-round text-[20px]">add</span> Nuevo Producto
+          </button>
+        </div>
+        <!-- Filter -->
+        <div class="mb-6">
+          <div class="relative max-w-xs">
+            <select id="product-filter" onchange="renderProductsList()" class="w-full appearance-none bg-m3-surface-container border-none rounded-xl px-4 py-3.5 text-sm font-medium text-m3-on-surface focus:ring-2 focus:ring-m3-primary cursor-pointer pr-10">
+              <option value="all">Todas las secciones</option>
+            </select>
+            <span class="material-icons-round absolute right-3 top-1/2 -translate-y-1/2 text-m3-outline pointer-events-none">expand_more</span>
+          </div>
+        </div>
+        <div id="products-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Populated by JS -->
+        </div>
+        <div id="products-empty" class="hidden text-center py-20 text-m3-outline">
+          <div class="w-24 h-24 bg-m3-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons-round text-5xl text-m3-outline-variant">inventory_2</span>
+          </div>
+          <p class="font-bold text-lg text-m3-on-surface-variant">No hay productos</p>
+          <p class="text-sm">Agrega tu primer arreglo floral</p>
+        </div>
+      </div>
+
+      <!-- ═══ ORDERS TAB (Activos) ═══ -->
+      <div id="panel-orders" class="hidden fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight">Pedidos Activos</h2>
+            <p class="text-sm text-m3-on-surface-variant mt-1">Órdenes pendientes y en proceso</p>
+          </div>
+          <button onclick="fetchOrders()" class="bg-m3-surface-container-high hover:bg-m3-surface-variant text-m3-on-surface-variant font-semibold px-4 py-2.5 rounded-[12px] flex items-center gap-2 transition-all shadow-sm text-sm w-max">
+            <span class="material-icons-round text-[18px]">refresh</span> Actualizar
+          </button>
+        </div>
+
+        <div id="orders-list" class="space-y-4">
+          <!-- Populated by JS -->
+        </div>
+        
+        <div id="orders-empty" class="hidden text-center py-20 text-m3-outline">
+          <div class="w-24 h-24 bg-m3-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons-round text-5xl text-m3-outline-variant">receipt_long</span>
+          </div>
+          <p class="font-bold text-lg text-m3-on-surface-variant">Sin pedidos activos</p>
+          <p class="text-sm">¡Buen trabajo! No hay órdenes pendientes.</p>
+        </div>
+      </div>
+
+      <!-- ═══ HISTORY TAB (Finalizados) ═══ -->
+      <div id="panel-history" class="hidden fade-in">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight">Historial</h2>
+            <p class="text-sm text-m3-on-surface-variant mt-1">Pedidos entregados y cancelados</p>
+          </div>
+          <div class="relative w-full sm:w-72">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span class="material-icons-round text-m3-outline text-[20px]">search</span>
+            </div>
+            <input id="history-search" oninput="renderHistoryOrders()" type="text" class="w-full bg-m3-surface-container border-none rounded-full pl-10 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-m3-primary placeholder-m3-outline focus:outline-none transition-shadow" placeholder="Buscar por nombre, ID..."/>
+          </div>
+        </div>
+
+        <div id="history-list" class="space-y-4">
+          <!-- Populated by JS -->
+        </div>
+        
+        <div id="history-empty" class="hidden text-center py-20 text-m3-outline">
+          <div class="w-24 h-24 bg-m3-surface-variant rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="material-icons-round text-5xl text-m3-outline-variant">history_toggle_off</span>
+          </div>
+          <p class="font-bold text-lg text-m3-on-surface-variant">Sin historial</p>
+          <p class="text-sm">No hay pedidos completados recientemente.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============ SECTION MODAL (M3 Dialog) ============ -->
+<div id="section-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-m3-on-surface/40 backdrop-blur-sm modal-overlay" onclick="closeSectionModal()"></div>
+  <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+    <div class="bg-m3-surface-container-low rounded-[28px] shadow-[0_24px_38px_3px_rgba(0,0,0,0.14)] w-full max-w-md pointer-events-auto fade-in max-h-[90vh] flex flex-col">
+      <div class="px-6 pt-6 pb-4 flex items-center justify-between shrink-0">
+        <h3 id="section-modal-title" class="text-2xl font-normal tracking-tight">Nueva Sección</h3>
+      </div>
+      <div class="px-6 py-2 space-y-5 overflow-y-auto">
+        <input type="hidden" id="section-id"/>
+        
+        <!-- M3 Outlined Field -->
+        <div class="relative">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Nombre *</label>
+          <input id="section-name" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="Ej. Amor y Romance"/>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Emoji</label>
+            <input id="section-emoji" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="Ej. 🌹"/>
+          </div>
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Orden</label>
+            <input id="section-order" type="number" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="1" value="1"/>
+          </div>
+        </div>
+        
+        <div class="relative">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Imagen de Banner (Subir o URL)</label>
+          <!-- Styled M3 File Input -->
+          <div class="bg-m3-surface-container rounded-[12px] p-2 border-2 border-dashed border-m3-outline-variant hover:border-m3-primary/50 transition-colors mb-2">
+            <input id="section-banner-file" type="file" accept="image/*" class="w-full text-sm text-m3-on-surface-variant file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-m3-primary-container file:text-m3-on-primary-container hover:file:bg-[#FFB4AB] file:transition-colors cursor-pointer"/>
+          </div>
+          <input id="section-banner" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="O pega una URL externa aquí..."/>
+        </div>
+
+        <div class="relative">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Subtítulo del Banner</label>
+          <input id="section-subtitle" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="Ej. Lo mejor para tu ser amado"/>
+        </div>
+
+        <div class="relative">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Badge del Banner</label>
+          <input id="section-badge" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="Ej. Best Seller"/>
+        </div>
+
+        <label class="flex items-center gap-3 p-3 bg-m3-surface-container rounded-[16px] cursor-pointer hover:bg-m3-surface-container-high transition-colors">
+          <input id="section-featured" type="checkbox" class="w-5 h-5 rounded border-m3-outline text-m3-primary focus:ring-m3-primary"/>
+          <span class="text-sm font-medium text-m3-on-surface">Destacar sección (mostrar banner en inicio)</span>
+        </label>
+      </div>
+      
+      <div class="p-6 flex justify-end gap-2 shrink-0">
+        <button onclick="closeSectionModal()" class="px-6 py-2.5 text-sm font-medium text-m3-primary hover:bg-m3-primary/10 rounded-full transition-colors">Cancelar</button>
+        <button onclick="saveSection()" id="section-save-btn" class="px-6 py-2.5 bg-m3-primary hover:bg-[#93000A] text-m3-on-primary text-sm font-medium rounded-full transition-colors shadow-sm">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PRODUCT MODAL (M3 Dialog) ============ -->
+<div id="product-modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-m3-on-surface/40 backdrop-blur-sm modal-overlay" onclick="closeProductModal()"></div>
+  <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+    <div class="bg-m3-surface-container-low rounded-[28px] shadow-[0_24px_38px_3px_rgba(0,0,0,0.14)] w-full max-w-lg pointer-events-auto fade-in max-h-[90vh] flex flex-col">
+      <div class="px-6 pt-6 pb-4 flex items-center justify-between shrink-0">
+        <h3 id="product-modal-title" class="text-2xl font-normal tracking-tight">Nuevo Producto</h3>
+      </div>
+      <div class="px-6 py-2 space-y-5 overflow-y-auto">
+        <input type="hidden" id="product-id"/>
+        
+        <div class="relative">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Nombre *</label>
+          <input id="product-name" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="Ej. Ramo Pasión Eterna"/>
+        </div>
+
+        <div class="relative">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Sección *</label>
+          <select id="product-section" class="w-full appearance-none bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors">
+            <option value="">Seleccionar sección...</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Precio *</label>
+            <input id="product-price" type="number" step="0.01" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="45.00"/>
+          </div>
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Precio Org. (Descuento)</label>
+            <input id="product-original-price" type="number" step="0.01" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="55.00"/>
+          </div>
+        </div>
+
+        <div class="relative">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Descripción</label>
+          <textarea id="product-description" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors resize-none" rows="3" placeholder="Describe el arreglo floral..."></textarea>
+        </div>
+
+        <div class="relative">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Imágenes (Subir o URLs) *</label>
+          <div class="bg-m3-surface-container rounded-[12px] p-2 border-2 border-dashed border-m3-outline-variant hover:border-m3-primary/50 transition-colors mb-2">
+            <input id="product-images-file" type="file" accept="image/*" multiple class="w-full text-sm text-m3-on-surface-variant file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-m3-primary-container file:text-m3-on-primary-container hover:file:bg-[#FFB4AB] file:transition-colors cursor-pointer"/>
+          </div>
+          <textarea id="product-images" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors resize-none font-mono text-[11px]" rows="2" placeholder="O pega URLs aquí (una por línea)..."></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Badge</label>
+            <input id="product-badge" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="Ej. New"/>
+          </div>
+          <div class="relative">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Orden</label>
+            <input id="product-order" type="number" class="w-full bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-3 text-sm focus:border-m3-primary focus:ring-0 transition-colors" placeholder="1" value="1"/>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="bg-m3-surface-container rounded-[20px] p-4">
+          <div class="flex items-center justify-between mb-3">
+            <label class="block text-sm font-bold text-m3-on-surface">Opciones Extras</label>
+            <button onclick="addOptionRow()" class="text-[13px] text-m3-primary font-bold bg-m3-primary/10 hover:bg-m3-primary/20 px-3 py-1 rounded-full transition-colors flex items-center gap-1"><span class="material-icons-round text-[16px]">add</span> Añadir</button>
+          </div>
+          <div id="options-container" class="space-y-2">
+            <!-- Dynamic option rows -->
+          </div>
+        </div>
+
+        <label class="flex items-center gap-3 p-3 bg-m3-surface-container rounded-[16px] cursor-pointer hover:bg-m3-surface-container-high transition-colors">
+          <input id="product-featured" type="checkbox" class="w-5 h-5 rounded border-m3-outline text-m3-primary focus:ring-m3-primary"/>
+          <span class="text-sm font-medium text-m3-on-surface">Producto destacado</span>
+        </label>
+      </div>
+      <div class="p-6 flex justify-end gap-2 shrink-0">
+        <button onclick="closeProductModal()" class="px-6 py-2.5 text-sm font-medium text-m3-primary hover:bg-m3-primary/10 rounded-full transition-colors">Cancelar</button>
+        <button onclick="saveProduct()" id="product-save-btn" class="px-6 py-2.5 bg-m3-primary hover:bg-[#93000A] text-m3-on-primary text-sm font-medium rounded-full transition-colors shadow-sm">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DELETE CONFIRM MODAL (M3 Dialog) ============ -->
+<div id="delete-modal" class="fixed inset-0 z-[60] hidden">
+  <div class="absolute inset-0 bg-m3-on-surface/40 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+  <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+    <div class="bg-m3-surface-container-low rounded-[28px] shadow-[0_24px_38px_3px_rgba(0,0,0,0.14)] w-full max-w-sm pointer-events-auto fade-in p-6 text-center">
+      <div class="w-14 h-14 bg-[#FFDAD6] text-[#410002] rounded-full flex items-center justify-center mx-auto mb-4">
+        <span class="material-icons-round text-2xl">delete_outline</span>
+      </div>
+      <h3 class="text-2xl font-normal mb-2 tracking-tight">¿Eliminar?</h3>
+      <p id="delete-message" class="text-sm text-m3-on-surface-variant mb-6">Esta acción no se puede deshacer.</p>
+      <div class="flex flex-col gap-2">
+        <button onclick="confirmDelete()" class="w-full px-6 py-3 text-sm font-medium bg-m3-error hover:bg-[#93000A] text-white rounded-full transition-colors">Sí, eliminar</button>
+        <button onclick="closeDeleteModal()" class="w-full px-6 py-3 text-sm font-medium text-m3-on-surface hover:bg-m3-surface-variant rounded-full transition-colors">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CUSTOM ALERT TOAST (M3 Snackbar) ============ -->
+<div id="custom-alert" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] hidden flex items-center gap-3 px-4 py-3.5 bg-[#313033] text-[#F4EFF4] rounded-[8px] shadow-lg fade-in text-sm font-medium w-max max-w-[90vw]">
+  <span id="custom-alert-icon" class="material-icons-round text-[20px]"></span>
+  <p id="custom-alert-message" class="flex-1"></p>
+  <button onclick="document.getElementById('custom-alert').classList.add('hidden')" class="p-1.5 ml-2 hover:bg-white/10 rounded-full transition-colors flex items-center justify-center">
+    <span class="material-icons-round text-[18px]">close</span>
+  </button>
+</div>
+
+<!-- ============ SUPABASE + ADMIN LOGIC ============ -->
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+// CREDENCIALES ACTUALIZADAS
+const SUPABASE_URL = "https://kihsjtpzevgtqpckgeux.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpaHNqdHB6ZXZndHFwY2tnZXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MjEwMDksImV4cCI6MjA4NjQ5NzAwOX0.63iuNCkhfazNnjW_xWHQG_70YBsiewytcL0dzBvUFDc";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let allSections = [];
+let allProducts = [];
+let allOrders = []; // New global state for orders
+let deleteCallback = null;
+let currentTab = 'sections';
+let alertTimeout;
+
+// ── Expose ──
+window.login = login;
+window.logout = logout;
+window.switchTab = switchTab;
+window.toggleMobileMenu = toggleMobileMenu;
+
+window.openSectionModal = openSectionModal;
+window.closeSectionModal = closeSectionModal;
+window.saveSection = saveSection;
+window.editSection = editSection;
+window.deleteSectionConfirm = deleteSectionConfirm;
+
+window.openProductModal = openProductModal;
+window.closeProductModal = closeProductModal;
+window.saveProduct = saveProduct;
+window.editProduct = editProduct;
+window.deleteProductConfirm = deleteProductConfirm;
+window.addOptionRow = addOptionRow;
+window.removeOptionRow = removeOptionRow;
+
+window.closeDeleteModal = closeDeleteModal;
+window.confirmDelete = confirmDelete;
+
+// New Logic for Orders
+window.fetchOrders = fetchOrders;
+window.updateOrderStatus = updateOrderStatus;
+window.renderHistoryOrders = renderHistoryOrders; // Expose for search
+
+// ── Custom Alert (M3 Snackbar style) ──
+window.showAlert = function(msg, isError = true) {
+  const alertEl = document.getElementById('custom-alert');
+  const iconEl = document.getElementById('custom-alert-icon');
+  const msgEl = document.getElementById('custom-alert-message');
+
+  alertEl.className = 'fixed bottom-6 lg:bottom-10 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 px-4 py-3.5 rounded-[8px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] fade-in text-sm font-normal w-max max-w-[90vw]';
+  
+  if (isError) {
+    alertEl.classList.add('bg-[#BA1A1A]', 'text-white');
+    iconEl.textContent = 'error_outline';
+  } else {
+    alertEl.classList.add('bg-[#313033]', 'text-[#F4EFF4]');
+    iconEl.textContent = 'check_circle';
+  }
+
+  msgEl.textContent = msg;
+  clearTimeout(alertTimeout);
+  alertEl.classList.remove('hidden');
+  alertTimeout = setTimeout(() => alertEl.classList.add('hidden'), 5000);
+}
+
+// ── Auth ──
+async function login() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.classList.add('hidden');
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  });
+
+  if (error) {
+    errEl.textContent = 'Credenciales incorrectas. Verifica tu email y contraseña.';
+    errEl.classList.remove('hidden');
+  }
+}
+
+async function logout() {
+  await supabase.auth.signOut();
+}
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (session) {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('admin-dashboard').classList.remove('hidden');
+    loadAllData();
+  } else {
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('admin-dashboard').classList.add('hidden');
+  }
+});
+
+// ── Load Data ──
+async function loadAllData() {
+  try {
+    const { data: sectionsData, error: sErr } = await supabase
+      .from('sections')
+      .select('*')
+      .order('order', { ascending: true });
+    
+    if (sErr) throw sErr;
+    allSections = sectionsData || [];
+
+    const { data: productsData, error: pErr } = await supabase
+      .from('products')
+      .select('*')
+      .order('order', { ascending: true });
+      
+    if (pErr) throw pErr;
+    allProducts = productsData || [];
+
+    renderSectionsList();
+    renderProductsList();
+    populateSectionDropdowns();
+    fetchOrders(); // Load orders as well
+  } catch (e) {
+    console.error('Error loading data:', e);
+    showAlert('Error al cargar datos: ' + e.message);
+  }
+}
+
+// ── Tabs (M3 Navigation) ──
+function switchTab(tab) {
+  currentTab = tab;
+  ['sections', 'products', 'orders', 'history'].forEach(t => {
+    // Desktop Nav Rail/Drawer
+    const deskTab = document.getElementById(`tab-${t}`);
+    if (deskTab) {
+      if (t === tab) {
+        deskTab.classList.add('bg-m3-primary-container', 'text-m3-on-primary-container');
+        deskTab.classList.remove('text-m3-on-surface', 'hover:bg-m3-surface-variant');
+      } else {
+        deskTab.classList.remove('bg-m3-primary-container', 'text-m3-on-primary-container');
+        deskTab.classList.add('text-m3-on-surface', 'hover:bg-m3-surface-variant');
+      }
+    }
+    
+    // Mobile Bottom Nav
+    const mobTab = document.getElementById(`mtab-${t}`);
+    const mobPill = document.getElementById(`mtab-${t}-pill`);
+    if (mobTab && mobPill) {
+      if (t === tab) {
+        mobTab.classList.add('text-m3-on-surface');
+        mobTab.classList.remove('text-m3-on-surface-variant');
+        mobPill.classList.add('bg-m3-primary-container', 'text-m3-on-primary-container');
+      } else {
+        mobTab.classList.remove('text-m3-on-surface');
+        mobTab.classList.add('text-m3-on-surface-variant');
+        mobPill.classList.remove('bg-m3-primary-container', 'text-m3-on-primary-container');
+      }
+    }
+
+    const panel = document.getElementById(`panel-${t}`);
+    if(panel) panel.classList.toggle('hidden', t !== tab);
+  });
+}
+switchTab('sections');
+
+function toggleMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('hidden');
+  sidebar.classList.toggle('fixed');
+  sidebar.classList.toggle('inset-0');
+  sidebar.classList.toggle('z-50');
+}
+
+// ═══════════════════════════════
+// SECTIONS CRUD
+// ═══════════════════════════════
+
+function renderSectionsList() {
+  const list = document.getElementById('sections-list');
+  const empty = document.getElementById('sections-empty');
+
+  if (allSections.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  list.innerHTML = allSections.map(s => `
+    <div class="bg-m3-surface-container rounded-[24px] p-5 flex items-center gap-4 hover:bg-m3-surface-container-high transition-colors fade-in">
+      ${s.bannerImage ? `<img src="${s.bannerImage}" class="w-16 h-16 rounded-[16px] object-cover shrink-0" alt="${s.name}"/>` : `<div class="w-16 h-16 rounded-[16px] bg-m3-surface-variant flex items-center justify-center text-2xl shrink-0">${s.emoji || '💐'}</div>`}
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <h3 class="font-semibold text-[1.05rem] text-m3-on-surface truncate">${s.emoji || ''} ${s.name}</h3>
+          ${s.featured ? '<span class="text-[10px] bg-[#FFDAD6] text-[#410002] font-bold px-2.5 py-0.5 rounded-full shrink-0">Destacada</span>' : ''}
+        </div>
+        <p class="text-xs text-m3-on-surface-variant mt-1">Orden: ${s.order || 0} • ${allProducts.filter(p => p.sectionId === s.id).length} productos</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-1 shrink-0">
+        <button onclick="editSection('${s.id}')" class="w-10 h-10 flex items-center justify-center text-m3-outline hover:bg-m3-surface-variant rounded-full transition-colors"><span class="material-icons-round text-[20px]">edit</span></button>
+        <button onclick="deleteSectionConfirm('${s.id}')" class="w-10 h-10 flex items-center justify-center text-m3-outline hover:bg-[#FFDAD6] hover:text-[#410002] rounded-full transition-colors"><span class="material-icons-round text-[20px]">delete</span></button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openSectionModal(sectionData) {
+  document.getElementById('section-modal-title').textContent = sectionData ? 'Editar Sección' : 'Nueva Sección';
+  document.getElementById('section-id').value = sectionData?.id || '';
+  document.getElementById('section-name').value = sectionData?.name || '';
+  document.getElementById('section-emoji').value = sectionData?.emoji || '';
+  document.getElementById('section-order').value = sectionData?.order || allSections.length + 1;
+  document.getElementById('section-banner-file').value = ''; 
+  document.getElementById('section-banner').value = sectionData?.bannerImage || '';
+  document.getElementById('section-subtitle').value = sectionData?.subtitle || '';
+  document.getElementById('section-badge').value = sectionData?.badge || '';
+  document.getElementById('section-featured').checked = sectionData?.featured || false;
+  document.getElementById('section-modal').classList.remove('hidden');
+}
+
+function closeSectionModal() {
+  document.getElementById('section-modal').classList.add('hidden');
+}
+
+function editSection(id) {
+  const s = allSections.find(x => x.id === id);
+  if (s) openSectionModal(s);
+}
+
+async function saveSection() {
+  const id = document.getElementById('section-id').value;
+  let bannerImageVal = document.getElementById('section-banner').value.trim();
+  const fileInput = document.getElementById('section-banner-file');
+
+  if (!document.getElementById('section-name').value.trim()) { showAlert('El nombre es obligatorio'); return; }
+
+  const btn = document.getElementById('section-save-btn');
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
+
+  try {
+    if (fileInput.files.length > 0) {
+      btn.textContent = 'Subiendo...';
+      const file = fileInput.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage.from('baner').upload(fileName, file);
+      if (uploadError) throw new Error(`Storage Error (${uploadError.statusCode}): ${uploadError.message}`);
+
+      const { data: publicUrlData } = supabase.storage.from('baner').getPublicUrl(fileName);
+      bannerImageVal = publicUrlData.publicUrl;
+    }
+
+    const data = {
+      name: document.getElementById('section-name').value.trim(),
+      emoji: document.getElementById('section-emoji').value.trim(),
+      order: parseInt(document.getElementById('section-order').value) || 1,
+      bannerImage: bannerImageVal,
+      subtitle: document.getElementById('section-subtitle').value.trim(),
+      badge: document.getElementById('section-badge').value.trim(),
+      featured: document.getElementById('section-featured').checked,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (id) {
+      const { error } = await supabase.from('sections').update(data).eq('id', id);
+      if (error) throw error;
+    } else {
+      data.created_at = new Date().toISOString();
+      const { error } = await supabase.from('sections').insert([data]);
+      if (error) throw error;
+    }
+    showAlert('Sección guardada', false);
+    closeSectionModal();
+    await loadAllData();
+  } catch (e) {
+    showAlert('Error: ' + e.message);
+  } finally {
+    btn.textContent = 'Guardar';
+    btn.disabled = false;
+  }
+}
+
+function deleteSectionConfirm(id) {
+  const s = allSections.find(x => x.id === id);
+  document.getElementById('delete-message').textContent = `Estás a punto de borrar "${s?.name}". Asegúrate de que no tenga productos o fallará.`;
+  document.getElementById('delete-modal').classList.remove('hidden');
+  deleteCallback = async () => {
+    const { error } = await supabase.from('sections').delete().eq('id', id);
+    if (error) throw error;
+    showAlert('Sección eliminada', false);
+    await loadAllData();
+  };
+}
+
+// ═══════════════════════════════
+// PRODUCTS CRUD
+// ═══════════════════════════════
+
+function populateSectionDropdowns() {
+  const selects = [document.getElementById('product-section'), document.getElementById('product-filter')];
+  
+  selects[0].innerHTML = '<option value="">Seleccionar sección...</option>' +
+    allSections.map(s => `<option value="${s.id}">${s.emoji || ''} ${s.name}</option>`).join('');
+
+  selects[1].innerHTML = '<option value="all">Todas las secciones</option>' +
+    allSections.map(s => `<option value="${s.id}">${s.emoji || ''} ${s.name}</option>`).join('');
+}
+
+function renderProductsList() {
+  const list = document.getElementById('products-list');
+  const empty = document.getElementById('products-empty');
+  const filter = document.getElementById('product-filter').value;
+
+  let filtered = allProducts;
+  if (filter !== 'all') {
+    filtered = filtered.filter(p => p.sectionId === filter);
+  }
+  filtered.sort((a, b) => (a.order || 99) - (b.order || 99));
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  list.innerHTML = filtered.map(p => {
+    const section = allSections.find(s => s.id === p.sectionId);
+    const img = p.images ? p.images[0] : (p.image || '');
+    const hasDiscount = p.originalPrice && p.originalPrice > p.price;
+    return `
+    <div class="bg-m3-surface-container rounded-[24px] p-5 flex items-center gap-4 hover:bg-m3-surface-container-high transition-colors fade-in">
+      ${img ? `<img src="${img}" class="w-16 h-16 rounded-[16px] object-cover shrink-0" alt="${p.name}"/>` : `<div class="w-16 h-16 rounded-[16px] bg-m3-surface-variant flex items-center justify-center shrink-0"><span class="material-icons-round text-m3-outline text-2xl">image</span></div>`}
+      <div class="flex-1 min-w-0">
+        <h3 class="font-semibold text-[1.05rem] text-m3-on-surface truncate">${p.name}</h3>
+        <div class="flex items-center gap-2 mt-0.5">
+          <span class="text-sm font-bold text-m3-primary">$${p.price?.toFixed(2) || '0.00'}</span>
+          ${hasDiscount ? `<span class="text-xs text-m3-on-surface-variant line-through">$${p.originalPrice.toFixed(2)}</span>` : ''}
+        </div>
+        <p class="text-[11px] text-m3-on-surface-variant mt-1.5">${section ? `${section.emoji || ''} ${section.name}` : 'Sin sección'} • Orden: ${p.order || 0}</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-1 shrink-0">
+        <button onclick="editProduct('${p.id}')" class="w-10 h-10 flex items-center justify-center text-m3-outline hover:bg-m3-surface-variant rounded-full transition-colors"><span class="material-icons-round text-[20px]">edit</span></button>
+        <button onclick="deleteProductConfirm('${p.id}')" class="w-10 h-10 flex items-center justify-center text-m3-outline hover:bg-[#FFDAD6] hover:text-[#410002] rounded-full transition-colors"><span class="material-icons-round text-[20px]">delete</span></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openProductModal(productData) {
+  document.getElementById('product-modal-title').textContent = productData ? 'Editar Producto' : 'Nuevo Producto';
+  document.getElementById('product-id').value = productData?.id || '';
+  document.getElementById('product-name').value = productData?.name || '';
+  document.getElementById('product-section').value = productData?.sectionId || '';
+  document.getElementById('product-price').value = productData?.price || '';
+  document.getElementById('product-original-price').value = productData?.originalPrice || '';
+  document.getElementById('product-description').value = productData?.description || '';
+  document.getElementById('product-images-file').value = '';
+  document.getElementById('product-images').value = productData?.images ? productData.images.join('\n') : '';
+  document.getElementById('product-badge').value = productData?.badge || '';
+  document.getElementById('product-order').value = productData?.order || allProducts.length + 1;
+  document.getElementById('product-featured').checked = productData?.featured || false;
+
+  const container = document.getElementById('options-container');
+  container.innerHTML = '';
+  if (productData?.options) {
+    productData.options.forEach(opt => addOptionRow(opt.name, opt.extraPrice || 0));
+  }
+
+  document.getElementById('product-modal').classList.remove('hidden');
+}
+
+function closeProductModal() {
+  document.getElementById('product-modal').classList.add('hidden');
+}
+
+function editProduct(id) {
+  const p = allProducts.find(x => x.id === id);
+  if (p) openProductModal(p);
+}
+
+function addOptionRow(name, price) {
+  const container = document.getElementById('options-container');
+  const row = document.createElement('div');
+  row.className = 'flex gap-2 items-center';
+  row.innerHTML = `
+    <input class="flex-1 bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-2 text-sm focus:border-m3-primary focus:ring-0 transition-colors opt-name" placeholder="Nombre" value="${name || ''}"/>
+    <input class="w-24 bg-transparent border-2 border-m3-outline-variant hover:border-m3-outline rounded-[12px] px-4 py-2 text-sm focus:border-m3-primary focus:ring-0 transition-colors opt-price" type="number" step="0.01" placeholder="+$0" value="${price || 0}"/>
+    <button onclick="removeOptionRow(this)" class="w-10 h-10 flex items-center justify-center hover:bg-[#FFDAD6] text-m3-outline hover:text-[#410002] rounded-full transition-colors"><span class="material-icons-round text-sm">close</span></button>`;
+  container.appendChild(row);
+}
+
+function removeOptionRow(btn) {
+  btn.parentElement.remove();
+}
+
+async function saveProduct() {
+  const id = document.getElementById('product-id').value;
+  const imagesRaw = document.getElementById('product-images').value.trim();
+  let images = imagesRaw.split('\n').map(u => u.trim()).filter(u => u);
+  const fileInput = document.getElementById('product-images-file');
+
+  const optRows = document.querySelectorAll('#options-container > div');
+  const options = [];
+  optRows.forEach(row => {
+    const name = row.querySelector('.opt-name').value.trim();
+    const extraPrice = parseFloat(row.querySelector('.opt-price').value) || 0;
+    if (name) options.push({ name, extraPrice });
+  });
+
+  if (!document.getElementById('product-name').value.trim()) { showAlert('El nombre es obligatorio'); return; }
+  const sectionId = document.getElementById('product-section').value;
+  if (!sectionId) { showAlert('Selecciona una sección'); return; }
+  const price = parseFloat(document.getElementById('product-price').value) || 0;
+  if (price <= 0) { showAlert('El precio debe ser mayor a 0'); return; }
+  if (images.length === 0 && fileInput.files.length === 0) { showAlert('Agrega al menos una imagen'); return; }
+
+  const btn = document.getElementById('product-save-btn');
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
+
+  try {
+    if (fileInput.files.length > 0) {
+      btn.textContent = 'Subiendo...';
+      for (const file of fileInput.files) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage.from('product').upload(fileName, file);
+        if (uploadError) throw new Error(`Storage Error (${uploadError.statusCode}): ${uploadError.message}`);
+
+        const { data: publicUrlData } = supabase.storage.from('product').getPublicUrl(fileName);
+        images.push(publicUrlData.publicUrl); 
+      }
+    }
+
+    const data = {
+      name: document.getElementById('product-name').value.trim(),
+      sectionId: sectionId,
+      price: price,
+      originalPrice: parseFloat(document.getElementById('product-original-price').value) || 0,
+      description: document.getElementById('product-description').value.trim(),
+      images: images,
+      badge: document.getElementById('product-badge').value.trim(),
+      order: parseInt(document.getElementById('product-order').value) || 1,
+      featured: document.getElementById('product-featured').checked,
+      options: options,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (id) {
+      const { error } = await supabase.from('products').update(data).eq('id', id);
+      if (error) throw error;
+    } else {
+      data.created_at = new Date().toISOString();
+      const { error } = await supabase.from('products').insert([data]);
+      if (error) throw error;
+    }
+    showAlert('Producto guardado', false);
+    closeProductModal();
+    await loadAllData();
+  } catch (e) {
+    showAlert('Error: ' + e.message);
+  } finally {
+    btn.textContent = 'Guardar';
+    btn.disabled = false;
+  }
+}
+
+function deleteProductConfirm(id) {
+  const p = allProducts.find(x => x.id === id);
+  document.getElementById('delete-message').textContent = `¿Eliminar el producto "${p?.name}"? Esta acción no se puede deshacer.`;
+  document.getElementById('delete-modal').classList.remove('hidden');
+  deleteCallback = async () => {
+    const { error } = await supabase.from('products').delete().eq('id', id);
+    if (error) throw error;
+    showAlert('Producto eliminado', false);
+    await loadAllData();
+  };
+}
+
+function closeDeleteModal() {
+  document.getElementById('delete-modal').classList.add('hidden');
+  deleteCallback = null;
+}
+
+async function confirmDelete() {
+  if (deleteCallback) {
+    try {
+      await deleteCallback();
+    } catch (e) {
+      showAlert('Error al eliminar: ' + e.message);
+    }
+  }
+  closeDeleteModal();
+}
+
+// ═══════════════════════════════
+// ORDERS LOGIC
+// ═══════════════════════════════
+
+async function updateOrderStatus(id, newStatus) {
+  try {
+    const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', id);
+    if (error) throw error;
+    showAlert(`Pedido #${id} actualizado a: ${newStatus}`, false);
+    fetchOrders(); // Reload orders to update UI (move to history if needed)
+  } catch (e) {
+    console.error(e);
+    showAlert('Error al actualizar estado: ' + e.message);
+  }
+}
+
+async function fetchOrders() {
+  const listActive = document.getElementById('orders-list');
+  const emptyActive = document.getElementById('orders-empty');
+  listActive.innerHTML = '<div class="text-center py-4"><span class="material-icons-round animate-spin text-m3-primary">refresh</span></div>';
+
+  try {
+    const { data: orders, error } = await supabase
+      .from('orders')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    allOrders = orders || []; // Store globally for search filtering
+
+    renderActiveOrders();
+    renderHistoryOrders();
+
+  } catch (e) {
+    console.error(e);
+    showAlert('Error al cargar pedidos: ' + e.message);
+  }
+}
+
+function renderActiveOrders() {
+  const list = document.getElementById('orders-list');
+  const empty = document.getElementById('orders-empty');
+  
+  // Filter only Active Orders
+  const activeOrders = allOrders.filter(o => !['entregado', 'cancelado'].includes(o.status));
+
+  if (activeOrders.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  list.innerHTML = activeOrders.map(o => createOrderCard(o)).join('');
+}
+
+function renderHistoryOrders() {
+  const list = document.getElementById('history-list');
+  const empty = document.getElementById('history-empty');
+  const searchTerm = document.getElementById('history-search').value.toLowerCase().trim();
+
+  // Filter History Orders + Search
+  let historyOrders = allOrders.filter(o => ['entregado', 'cancelado'].includes(o.status));
+
+  if (searchTerm) {
+    historyOrders = historyOrders.filter(o => 
+      o.customer_name.toLowerCase().includes(searchTerm) ||
+      o.id.toString().includes(searchTerm) ||
+      o.customer_address.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  if (historyOrders.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  list.innerHTML = historyOrders.map(o => createOrderCard(o)).join('');
+}
+
+function createOrderCard(o) {
+  const date = new Date(o.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
+  
+  let statusColorClass = 'bg-[#E0E0E0] text-[#424242]';
+  if (o.status === 'pendiente') statusColorClass = 'bg-[#FFDAD6] text-[#410002]';
+  else if (o.status === 'en camino') statusColorClass = 'bg-[#FFD8E4] text-[#31111D]';
+  else if (o.status === 'entregado') statusColorClass = 'bg-[#E8F5E9] text-[#052E16]';
+  else if (o.status === 'cancelado') statusColorClass = 'bg-[#F2F2F2] text-[#5e5e5e]';
+
+  // Parse Items
+  let itemsHtml = '';
+  if (Array.isArray(o.items)) {
+    itemsHtml = o.items.map(i => `
+      <div class="text-xs text-m3-on-surface-variant flex justify-between">
+        <span>${i.quantity}x ${i.product_name} ${i.option_name ? `(${i.option_name})` : ''}</span>
+        <span>$${i.total_price.toFixed(2)}</span>
+      </div>
+    `).join('');
+  }
+
+  return `
+  <div class="bg-m3-surface-container rounded-[24px] p-5 hover:bg-m3-surface-container-high transition-colors fade-in">
+    <div class="flex justify-between items-start mb-3">
+      <div>
+        <h3 class="font-bold text-[1.1rem] text-m3-on-surface">Pedido #${o.id}</h3>
+        <p class="text-xs text-m3-on-surface-variant">${date}</p>
+      </div>
+      
+      <div class="relative">
+        <select onchange="updateOrderStatus(${o.id}, this.value)" class="appearance-none pl-3 pr-8 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-transparent border-0 ring-1 ring-inset focus:ring-2 focus:ring-inset cursor-pointer ${statusColorClass}" style="box-shadow: none;">
+          <option value="pendiente" ${o.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+          <option value="en camino" ${o.status === 'en camino' ? 'selected' : ''}>En camino</option>
+          <option value="entregado" ${o.status === 'entregado' ? 'selected' : ''}>Entregado</option>
+          <option value="cancelado" ${o.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+           <span class="material-icons-round text-[14px]">expand_more</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mb-3 p-3 bg-m3-surface-container-low rounded-[16px] space-y-1">
+      <p class="text-sm font-semibold text-m3-on-surface">${o.customer_name}</p>
+      <p class="text-xs text-m3-on-surface-variant flex items-start gap-1"><span class="material-icons-round text-[14px]">place</span> ${o.customer_address}</p>
+      ${o.customer_message ? `<p class="text-xs text-m3-on-surface-variant italic mt-1">"${o.customer_message}"</p>` : ''}
+    </div>
+
+    <div class="space-y-1 mb-3 border-t border-m3-outline-variant/20 pt-2">
+      ${itemsHtml}
+    </div>
+    
+    <div class="flex justify-between items-center border-t border-m3-outline-variant/50 pt-3">
+      <span class="text-sm font-medium text-m3-on-surface-variant">Total</span>
+      <span class="text-xl font-extrabold text-m3-primary">$${o.total_amount.toFixed(2)}</span>
+    </div>
+  </div>`;
+}
+</script>
+</body>
+</html>
