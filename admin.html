@@ -444,14 +444,15 @@ body { min-height: 100dvh; background-color: #FFF8F7; } /* bg-m3-surface */
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 // CREDENCIALES ACTUALIZADAS
-const SUPABASE_URL = "https://kihsjtpzevgtqpckgeux.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtpaHNqdHB6ZXZndHFwY2tnZXV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MjEwMDksImV4cCI6MjA4NjQ5NzAwOX0.63iuNCkhfazNnjW_xWHQG_70YBsiewytcL0dzBvUFDc";
+const SUPABASE_URL = "https://dygejocowhzvvxubndvl.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5Z2Vqb2Nvd2h6dnZ4dWJuZHZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NzM4OTAsImV4cCI6MjA4ODE0OTg5MH0.ytmAPh2qVKrnN8zdDzmV0j1Wmere7t74NTc_HP1_1CA";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// Variables de estado únicas
 let allSections = [];
 let allProducts = [];
-let allOrders = []; // New global state for orders
+let allOrders = []; 
 let deleteCallback = null;
 let currentTab = 'sections';
 let alertTimeout;
@@ -482,7 +483,7 @@ window.confirmDelete = confirmDelete;
 // New Logic for Orders
 window.fetchOrders = fetchOrders;
 window.updateOrderStatus = updateOrderStatus;
-window.renderHistoryOrders = renderHistoryOrders; // Expose for search
+window.renderHistoryOrders = renderHistoryOrders; 
 
 // ── Custom Alert (M3 Snackbar style) ──
 window.showAlert = function(msg, isError = true) {
