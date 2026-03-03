@@ -63,7 +63,9 @@ body { min-height: 100dvh; background-color: #FFF8F7; -webkit-tap-highlight-colo
     <div class="max-w-lg mx-auto w-full">
       <div class="flex justify-between items-center mb-5">
         <!-- Logo Image -->
-        <img src="logo.png" alt="Fleur d'Amour" class="h-10 object-contain"/>
+        <div class="h-10 text-xl font-bold flex items-center gap-2 text-m3-primary">
+           <span class="material-icons-round">local_florist</span> Fleur d'Amour
+        </div>
         
         <!-- Instagram Button -->
         <a href="https://instagram.com" target="_blank" class="w-10 h-10 rounded-full bg-m3-primary-container text-m3-on-primary-container flex items-center justify-center transition-transform active:scale-95">
@@ -170,6 +172,7 @@ body { min-height: 100dvh; background-color: #FFF8F7; -webkit-tap-highlight-colo
   </div>
 </div>
 
+<!-- ============ SUPABASE + APP LOGIC ============ -->
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
@@ -196,7 +199,7 @@ window.closeProductModal = closeProductModal;
 window.filterByCategory = filterByCategory;
 window.filterProducts = filterProducts;
 window.navigateTo = navigateTo;
-window.processOrder = processOrder; // New function
+window.processOrder = processOrder; // Declarada globalmente para ser llamada desde el HTML
 window.showToast = showToast;
 
 // ── Logic ──
@@ -292,7 +295,7 @@ function renderProducts() {
       <div class="relative aspect-[4/5] rounded-[20px] overflow-hidden bg-m3-surface-container mb-3">
         ${hasDiscount ? `<span class="absolute top-2 left-2 bg-[#BA1A1A] text-white text-[10px] font-bold px-2 py-1 rounded-full z-10 shadow-sm">-${discountPct}%</span>` : ''}
         ${p.badge && !hasDiscount ? `<span class="absolute top-2 left-2 bg-m3-primary-container text-m3-on-primary-container text-[10px] font-bold px-2 py-1 rounded-full z-10">${p.badge}</span>` : ''}
-        <img alt="${p.name}" class="w-full h-full object-cover" src="${p.images ? p.images[0] : (p.image || '')}" loading="lazy"/>
+        <img alt="${p.name}" class="w-full h-full object-cover" src="${p.images && p.images.length > 0 ? p.images[0] : ''}" loading="lazy"/>
         <button onclick="event.stopPropagation(); toggleFavorite(this)" class="absolute top-2 right-2 w-8 h-8 bg-white/60 backdrop-blur-md rounded-full flex items-center justify-center text-m3-on-surface-variant hover:text-m3-primary hover:bg-white transition-colors">
           <span class="material-icons-round text-[18px]">favorite_border</span>
         </button>
@@ -318,7 +321,8 @@ function showProductDetail(productId) {
   if (!p) return;
   const section = allSections.find(s => s.id === p.sectionId);
   const hasDiscount = p.originalPrice && p.originalPrice > p.price;
-  const images = p.images || [p.image || ''];
+  const images = p.images || [];
+  const mainImage = images.length > 0 ? images[0] : '';
 
   const modal = document.getElementById('product-modal');
   const content = document.getElementById('product-modal-content');
@@ -331,7 +335,7 @@ function showProductDetail(productId) {
        <button class="w-12 h-12 bg-m3-surface-container-high rounded-full flex items-center justify-center text-m3-on-surface transition-colors hover:bg-m3-surface-variant"><span class="material-icons-round">favorite_border</span></button>
     </div>
     <div class="relative w-full aspect-[4/5] -mt-20">
-      <img id="detail-main-img" alt="${p.name}" class="w-full h-full object-cover rounded-b-[40px] shadow-sm" src="${images[0]}"/>
+      <img id="detail-main-img" alt="${p.name}" class="w-full h-full object-cover rounded-b-[40px] shadow-sm" src="${mainImage}"/>
       ${images.length > 1 ? `<div class="absolute bottom-6 left-0 w-full flex justify-center gap-2 z-10">${images.map((img, i) => `<button onclick="document.getElementById('detail-main-img').src='${img}'" class="w-2.5 h-2.5 rounded-full ${i === 0 ? 'bg-m3-on-primary scale-125' : 'bg-m3-on-primary/50'} transition-all"></button>`).join('')}</div>` : ''}
     </div>
     <div class="px-6 pt-8">
@@ -455,7 +459,7 @@ function renderCartContent() {
     const unitPrice = p.price + (c.optionPrice || 0);
     const itemTotal = unitPrice * c.qty;
     subtotal += itemTotal;
-    const img = p.images ? p.images[0] : (p.image || '');
+    const img = p.images && p.images.length > 0 ? p.images[0] : '';
     itemsHtml += `
     <article class="bg-m3-surface-container rounded-[24px] p-3 flex gap-4 items-center mb-3">
       <div class="w-24 h-24 shrink-0 rounded-[16px] overflow-hidden bg-m3-surface-variant"><img alt="${p.name}" class="w-full h-full object-cover" src="${img}"/></div>
@@ -486,11 +490,11 @@ function renderCartContent() {
       </div>
       <div class="space-y-4">
         <div class="relative">
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Para quién</label>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Para quién *</label>
           <input id="cart-recipient" class="w-full bg-m3-surface-container-lowest border-2 border-m3-surface-container-highest focus:border-m3-primary rounded-[16px] px-4 py-3.5 text-sm focus:ring-0 transition-colors" placeholder="Ej. María García" type="text"/>
         </div>
         <div class="relative">
-          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Dirección (Charlotte)</label>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-m3-outline mb-1.5 ml-1">Dirección (Charlotte) *</label>
           <input id="cart-address" class="w-full bg-m3-surface-container-lowest border-2 border-m3-surface-container-highest focus:border-m3-primary rounded-[16px] px-4 py-3.5 text-sm focus:ring-0 transition-colors" placeholder="Ej. 123 Tryon St" type="text"/>
         </div>
         <div class="relative">
@@ -568,6 +572,110 @@ function filterProducts() {
     title.textContent = 'Resultados';
   } else {
     filterByCategory(activeCategory); // reset title
+  }
+}
+
+// ── Orders processing ──
+async function processOrder() {
+  const recipient = document.getElementById('cart-recipient').value.trim();
+  const address = document.getElementById('cart-address').value.trim();
+  const message = document.getElementById('cart-message').value.trim();
+
+  // Validación básica
+  if (!recipient || !address) {
+    showToast('Por favor completa el destinatario y la dirección');
+    return;
+  }
+
+  if (cart.length === 0) {
+    showToast('El carrito está vacío');
+    return;
+  }
+
+  // Deshabilitar botón temporalmente para evitar dobles envíos
+  const btn = document.getElementById('btn-checkout');
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '<span class="material-icons-round animate-spin">refresh</span> Procesando...';
+  btn.disabled = true;
+
+  try {
+    let subtotal = 0;
+    // Estructurar los items para la base de datos y calcular total seguro
+    const items = cart.map(c => {
+      const p = allProducts.find(x => x.id === c.id);
+      const unitPrice = p.price + (c.optionPrice || 0);
+      const itemTotal = unitPrice * c.qty;
+      subtotal += itemTotal;
+      
+      return {
+        product_id: p.id,
+        product_name: p.name,
+        option_name: c.optionName,
+        quantity: c.qty,
+        unit_price: unitPrice,
+        total_price: itemTotal
+      };
+    });
+
+    const shipping = 15;
+    const totalAmount = subtotal + shipping;
+
+    // 1. Guardar la orden en Supabase
+    const orderData = {
+      customer_name: recipient,
+      customer_address: address,
+      customer_message: message,
+      total_amount: totalAmount,
+      status: 'pendiente',
+      items: items // Guardamos la foto del carrito en JSONB
+    };
+
+    const { data: insertedOrder, error } = await supabase
+      .from('orders')
+      .insert([orderData])
+      .select();
+
+    if (error) throw error;
+    
+    // Obtenemos el ID autogenerado para dárselo al cliente en WhatsApp
+    const orderId = insertedOrder[0].id;
+
+    // 2. Crear el mensaje de WhatsApp
+    let waMsg = `*¡Nuevo Pedido #${orderId}!* 🌸\n\n`;
+    waMsg += `*Para:* ${recipient}\n`;
+    waMsg += `*Dirección:* ${address}\n`;
+    if (message) waMsg += `*Mensaje en tarjeta:* "${message}"\n`;
+    waMsg += `\n*Detalles:*\n`;
+    
+    items.forEach(i => {
+      waMsg += `- ${i.quantity}x ${i.product_name} ${i.option_name ? `(${i.option_name})` : ''} ($${i.total_price.toFixed(2)})\n`;
+    });
+    
+    waMsg += `\n*Envío local:* $${shipping.toFixed(2)}\n`;
+    waMsg += `*Total a pagar:* $${totalAmount.toFixed(2)}\n\n`;
+    waMsg += `_Por favor, confírmenme el método de pago._`;
+
+    // Reemplaza con el número de teléfono de la florería (código de país + número, sin signos ni espacios)
+    const phoneNumber = "17041234567"; 
+    const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(waMsg)}`;
+
+    // 3. Limpiar el carrito y cerrar
+    cart = [];
+    saveCart();
+    updateCartUI();
+    closeCart();
+    showToast('¡Pedido realizado con éxito!');
+
+    // 4. Redirigir a WhatsApp
+    window.open(waUrl, '_blank');
+
+  } catch (error) {
+    console.error('Error procesando pedido:', error);
+    showToast('Ocurrió un error. Intenta nuevamente.');
+  } finally {
+    // Restaurar el botón
+    btn.innerHTML = originalHtml;
+    btn.disabled = false;
   }
 }
 
